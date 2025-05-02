@@ -1,7 +1,7 @@
 services:
   backend:
-    container_name: ground_control_backend
-    image: ground_control_backend
+    container_name: template_backend
+    image: template_backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -11,15 +11,15 @@ services:
       - logs:/app/logs
     env_file:
       - .env
-    command: ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "${PORT_GROUND_CONTROL_BACK}", "--log-level", "warning"]
+    command: ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "${PORT_TEMPLATE_BACK}", "--log-level", "warning"]
     ports:
-      - "${PORT_GROUND_CONTROL_BACK}:${PORT_GROUND_CONTROL_BACK}"
+      - "${PORT_TEMPLATE_BACK}:${PORT_TEMPLATE_BACK}"
     networks:
-      - ground_control_network
+      - template_network
 
   frontend:
-    container_name: ground_control_frontend
-    image: ground_control_frontend
+    container_name: template_frontend
+    image: template_frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -29,12 +29,12 @@ services:
     volumes:
       - /var/log/nginx:/var/log/nginx
     ports:
-      - "${PORT_GROUND_CONTROL_FRONT}:8081"
+      - "${PORT_TEMPLATE_FRONT}:8081"
     networks:
-      - ground_control_network
+      - template_network
 
 networks:
-  ground_control_network:
+  template_network:
     driver: bridge
 
 volumes:

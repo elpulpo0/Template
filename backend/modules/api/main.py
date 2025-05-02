@@ -14,9 +14,9 @@ FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 def create_app() -> FastAPI:
     app = FastAPI(
-    title="Ground Control API",
-    description="API for the Ground Control application",
-    version="1.2.0"
+    title="Template API",
+    description="Template",
+    version="1.0.0"
     )
 
     # Ajout du middleware CORS
