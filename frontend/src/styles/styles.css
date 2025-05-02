@@ -1,0 +1,575 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #213547;
+  background-color: #ffffff;
+}
+
+body {
+  margin-bottom: 60px;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.chart {
+  font-family: Arial, sans-serif;
+  padding: 15px;
+  margin: 15px;
+  background-color: #b4e6df;
+  border-radius: 8px;
+  border-color: #333;
+  border-style: groove;
+}
+
+.module {
+    font-family: Arial, sans-serif;
+    padding: 15px;
+    margin: 15px;
+    background-color: #b4e6df;
+    border-radius: 8px;
+    display: flex;
+    border-color: #333;
+    border-style: groove;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.module-prel {
+  padding: 35px;
+  font-size: 0.8em;
+}
+
+/* Classes générales pour les catégories */
+.info { background-color: lightgreen; }
+.observations { background-color: rgb(255, 255, 169); }
+.absorbances { background-color: lightcoral; }
+.recoltes { background-color: lightblue; }
+.lumieres { background-color: lightgoldenrodyellow; }
+.ph { background-color: lightpink; }
+.co2 { background-color: rgb(204, 108, 228);}
+.masse-seche { background-color: lightcyan; }
+.dosage { background-color: lightseagreen; }
+.molecules { background-color: lightgray; }
+.temperature { background-color: lightsteelblue; }
+.actions { background-color: rgb(0, 184, 190); }
+.info-cat { color: lightgreen; }
+.observations-cat { color: rgb(255, 255, 169); }
+.absorbances-cat { color: lightcoral; }
+.recoltes-cat { color: lightblue; }
+.lumieres-cat { color: lightgoldenrodyellow; }
+.ph-cat { color: lightpink; }
+.co2-cat { color: rgb(204, 108, 228); }
+.masse-seche-cat { color: lightcyan; }
+.dosage-cat { color: lightseagreen; }
+.molecules-cat { color: lightgray; }
+.temperature-cat { color: lightsteelblue; }
+.actions-cat { color: rgb(0, 184, 190); }
+
+/* Conteneur du tableau pour le scroll horizontal */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  max-height: 60vh; /* Ajoute un défilement horizontal si nécessaire */
+}
+
+/* Fixe les largeurs des colonnes et active un layout fixe */
+table {
+  width: 300%;
+  border-collapse: collapse; /* Fusionne les bordures */
+}
+
+.table-recoltes {
+  width: 95%;
+  margin: 0 auto;
+}
+
+/* Définir une largeur spécifique pour chaque colonne */
+th.small, td.small { width: 1%; }
+th.middle, td.middle { width: 3%; }
+th.big, td.big { width: 8%; }
+
+thead {
+  position: sticky; /* Fixe l'élément à son emplacement */
+  top: 0; /* Place l'élément en haut du tableau lorsqu'on fait défiler */
+  background-color: #fff; /* Arrière-plan pour la lisibilité */
+  z-index: 1; /* Assure que les th restent au-dessus du contenu */
+  padding: 15px;
+  border: 1px solid #ccc;
+}
+
+/* Règles générales pour les cellules */
+td {
+  padding: 1px 8px; /* Padding pour donner de l'air */
+  text-align: center; /* Centre le texte */
+  border: 1px solid #ddd; /* Bordure autour des cellules */
+  word-wrap: break-word; /* Permet de couper les mots trop longs */
+  overflow: hidden; /* Cache le texte qui dépasse */
+}
+
+/* Styliser les entêtes de colonnes */
+table th {
+  text-align: center;
+  font-weight: bold; /* Met en gras */
+  padding: 15px;
+  background-color: #213547;
+}
+
+.edit-btn, .delete-btn,.open-btn {
+  margin-right: 5px;
+  background-color: inherit;
+  color: black;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+  /* =================== CSS pour les formulaires ======================= */
+
+
+.form_prel {
+  width: 100%; /* Ajuster la largeur du formulaire */
+  max-width: 90%; /* Limiter la largeur maximale */
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto; /* Centrer le formulaire */
+}
+
+.form-section {
+  margin-bottom: 20px;
+  padding: 10px; /* Ajouter du padding autour des sections */
+  border-radius: 10px;
+}
+
+.form-section h3 {
+  color: #333;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+textarea {
+  width: 95%; /* Les inputs prennent 80% de la largeur de la section */
+  padding: 12px; /* Augmenter le padding pour plus d'air dans les champs */
+  margin-bottom: 10px;
+  margin-left: auto; /* Centrer les inputs */
+  margin-right: auto;
+  display: block; /* Assurer que les inputs soient des blocs */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Inclure le padding et la bordure dans la largeur totale */
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+  width: 80%; /* Les inputs prennent 80% de la largeur de la section */
+  padding: 12px; /* Augmenter le padding pour plus d'air dans les champs */
+  margin-bottom: 10px;
+  margin-left: auto; /* Centrer les inputs */
+  margin-right: auto;
+  display: block; /* Assurer que les inputs soient des blocs */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Inclure le padding et la bordure dans la largeur totale */
+}
+
+/* Pour améliorer l'espacement et l'alignement */
+.form-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Utilisation de 2 colonnes pour un meilleur agencement */
+  gap: 20px; /* Espacement entre les éléments */
+}
+
+.form-section {
+  width: 100%; /* Remplir l'espace de la section */
+  box-sizing: border-box; /* Assurez-vous que le padding et la bordure sont inclus dans la largeur */
+}
+
+.form-section input {
+  width: 100%; /* Remplir l'espace de la section */
+  box-sizing: border-box; /* Assurez-vous que le padding et la bordure sont inclus dans la largeur */
+}
+
+/* =================== CSS pour les filtres ======================= */
+
+.filters-container {
+  padding: 5px;
+  }
+
+  .filter-group {
+    margin-bottom: 15px;
+  }
+
+  .filter-group label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    font-size: small;
+  }
+  
+  .button-group button {
+    padding: 10px 15px;
+    border: 2px solid #ccc;
+    color: rgb(25, 117, 255);
+    background-color: #9fd7fc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  /* Bouton actif (sélectionné) */
+  .button-group button.active {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  /* Bouton culture off */
+  .button-group button.off {
+    border-color: #ce4b4b;
+  }
+
+  input.off {
+    border-color: #ce4b4b;
+  }
+
+  /* Bouton culture on */
+  .button-group button.on {
+    border-color: #05bd51;
+  }
+
+  input.on {
+    border-color: #05bd51;
+  }
+  
+  /* Effet de survol sur tous les boutons */
+  .button-group button:hover {
+    background-color: #f0f0f0;
+    color: rgb(25, 117, 255);
+  }
+  
+
+  .dropdown-container {
+    display: flex;
+    flex-direction: row; /* aligne les enfants en ligne */
+    gap: 1rem; /* espace entre les dropdowns */
+    flex-wrap: wrap; /* permet de passer à la ligne si l'espace est insuffisant */
+    margin-bottom: 1rem;
+  }
+
+  .dropdown-container label {
+    display: flex;
+    align-items: center; /* aligne verticalement le texte avec le select */
+    gap: 0.5rem; /* petit espace entre le texte du label et le select */
+    flex: 1; /* répartit l’espace entre les labels */
+    min-width: 200px; /* largeur minimale */
+  }
+  
+  .dropdown-container select {
+    min-width: 150px;
+    flex: 1;
+  }  
+
+  .styled-dropdown {
+    width: 100%;
+    padding: 12px;
+    font-size: small;
+    color: #333;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .styled-dropdown:hover {
+    border-color: #007bff;
+  }
+
+  .styled-dropdown:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+
+  .styled-dropdown option {
+    padding: 10px;
+  }
+
+  .form-input {
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
+  .styled-upload {
+    width: 100%;
+    padding: 12px;
+    font-size: small;
+    color: #333;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+  }
+  
+  /* Bonus pour changer le bouton fichier (non supporté partout) */
+  .styled-upload::file-selector-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #eee;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .styled-upload::file-selector-button:hover {
+    background-color: #ddd;
+  }
+
+  label {
+    display: flex;
+    margin-bottom: 15px;
+    gap: 5px;
+  }
+  
+  .styled-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  
+    /* Enlève l'apparence native */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  
+    /* Carré stylisé */
+    border: 2px solid #7c3aed;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+  
+    /* Pour éviter qu'il prenne trop de place dans un flex container */
+    flex: 0 0 20px;
+  }
+  
+  .styled-checkbox:checked {
+    background-color: #7c3aed;
+    border-color: #7c3aed;
+  }
+  
+  .styled-checkbox:checked::after {
+    content: '✔';
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    bottom: 0px;
+    left: 3px;
+  }
+  
+
+  /* =================== CSS pour l'input du volume traité ======================= */
+
+
+.inputs-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+.inputs-container input:first-child {
+  width: 75%;
+}
+
+.inputs-container input:last-child {
+  width: 25%;
+}
+
+
+/* =================== CSS Récoltes =================== */
+
+.module-recoltes {
+  font-family: Arial, sans-serif;
+  padding: 15px;
+  margin: 15px;
+  background-color: #b4e6df;
+  border-radius: 8px;
+  border-color: #333;
+  border-style: groove;
+}
+
+/* Wrapper pour détails + ajout batch côte à côte */
+.recolte-top-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 0 1rem; /* Ajoute de l'espace sur les côtés */
+}
+
+/* Détails de la récolte */
+.recolte-details,
+.recolte-form-container {
+  flex: 1;
+  max-width: 500px; /* Ajuste la largeur maximale pour chaque section */
+  background-color: #fff;
+  padding: 1rem 1.2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.recolte-details h2,
+.recolte-form-container h2 {
+  margin-bottom: 1rem;
+  color: #339988;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* Style des éléments dans les deux sections (détails et formulaire) */
+.recolte-details div,
+.recolte-form-container .recolte-field {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.recolte-details div:last-child,
+.recolte-form-container .recolte-field:last-child {
+  border-bottom: none;
+}
+
+.recolte-details div {
+  border-bottom: 1px solid #eee;
+}
+
+/* Champs du formulaire */
+.recolte-form-container .recolte-field {
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.recolte-form-container .recolte-input {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.recolte-submit {
+  margin-top: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  background-color: #339988;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.recolte-submit:hover {
+  background-color: #2b7a6e;
+}
+
+/* Tableau des batches */
+.recolte-table {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.recolte-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.recolte-table th,
+.recolte-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.recolte-table th {
+  background-color: #f7f7f7;
+  font-weight: 600;
+}
+
+.recolte-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.recolte-table .absorbances-cat {
+  min-width: 150px;
+}
+
+.form-recolte {
+  width: 20%; /* Remplir l'espace de la section */
+  box-sizing: border-box; /* Assurez-vous que le padding et la bordure sont inclus dans la largeur */
+}
+
+.form-recolte input {
+  width: 100%; /* Remplir l'espace de la section */
+  box-sizing: border-box; /* Assurez-vous que le padding et la bordure sont inclus dans la largeur */
+}
+
+/* CSS Cultures */
+
+/* Conteneur global pour les éléments */
+.cultures-container {
+  display: flex;
+  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si l'espace est insuffisant */
+  gap: 20px; /* Espacement entre les éléments */
+}
+
+/* Style pour chaque culture */
+.culture-item {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacement entre le checkbox et les textes */
+  margin: 5px 0; /* Espacement vertical entre les éléments */
+}
