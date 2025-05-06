@@ -18,7 +18,7 @@ const handleRoleChange = (newRole: string) => {
 <template>
   <div>
     <header class="header">
-      <div class="left-section">
+      <div>
         <img src="./assets/logo.png" alt="Logo" class="logo" />
         <ul class="nav-links" v-if="['admin', 'editor', 'reader'].includes(authStore.userRole)">
           <li><router-link to="/page1" class="nav-link">Page 1</router-link></li>
@@ -51,8 +51,9 @@ body {
   border-radius: 12px;
 }
 
-.logo-container img {
+.logo {
   height: 100px;
+  margin-bottom: 50px;
 }
 
 /* Navbar */

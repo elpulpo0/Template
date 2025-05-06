@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, constr
-from typing import List
+from typing import List, Optional
 
 
 # Modèle Pydantic pour validation
@@ -21,9 +21,14 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 
-# Modèle pour mettre à jour un rôle
 class RoleUpdate(BaseModel):
     role: str
+
+
+class UserUpdate(BaseModel):
+    name: Optional[str]
+    email: Optional[EmailStr]
+    password: Optional[str]
 
 
 class Token(BaseModel):
