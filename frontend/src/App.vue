@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { createRouter, createWebHistory } from 'vue-router'
 import Auth from './components/Auth.vue';
 
 import { useAuthStore } from './stores/useAuthStore'
