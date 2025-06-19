@@ -4,7 +4,7 @@
       © {{ new Date().getFullYear() }} EL Pulpo — Tous droits réservés.
     </p>
     <p class="copyright">
-      {{ user.app_name.charAt(0).toUpperCase() + app_name.name.slice(1) }} v{{ version }} – dernière mise à jour le {{ buildDate }}
+      {{ app_name.charAt(0).toUpperCase() + app_name.slice(1) }} v{{ version }} – dernière mise à jour le {{ buildDate }}
     </p>
     <p class="copyright">
       commit: <a :href="commitUrl" target="_blank" rel="noopener">{{ commitHash }}</a> ({{ commitMessage }})
