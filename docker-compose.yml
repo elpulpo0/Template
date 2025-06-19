@@ -1,7 +1,7 @@
 services:
   backend:
-    container_name: template_backend
-    image: template_backend
+    container_name: ${APP_NAME}_backend
+    image: ${APP_NAME}_backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -11,30 +11,32 @@ services:
       - logs:/app/logs
     env_file:
       - .env
-    command: ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "${PORT_TEMPLATE_BACK}", "--log-level", "warning"]
+    command: ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "${PORT_BACK}", "--log-level", "warning"]
     ports:
-      - "${PORT_TEMPLATE_BACK}:${PORT_TEMPLATE_BACK}"
+      - "${PORT_BACK}:${PORT_BACK}"
     networks:
-      - template_network
+      - ${APP_NAME}_network
 
   frontend:
-    container_name: template_frontend
-    image: template_frontend
+    container_name: ${APP_NAME}_frontend
+    image: ${APP_NAME}_frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
     restart: always
+    environment:
+      - VITE_BACKEND_URL="http://backend:${PORT_BACK}"
     env_file:
       - .env
     volumes:
       - /var/log/nginx:/var/log/nginx
     ports:
-      - "${PORT_TEMPLATE_FRONT}:8081"
+      - "${PORT_FRONT}:8081"
     networks:
-      - template_network
+      - ${APP_NAME}_network
 
 networks:
-  template_network:
+  ${APP_NAME}_network:
     driver: bridge
 
 volumes:

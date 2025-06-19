@@ -3,7 +3,9 @@ from datetime import timedelta, timezone, datetime
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException, status
-from modules.api.users.schemas import Token
+from modules.api.auth.schemas import Token
+from modules.api.users.models import User
+from modules.api.auth.models import RefreshToken
 from modules.database.dependencies import get_users_db
 from sqlalchemy.orm import Session
 from modules.api.auth.functions import (
@@ -13,11 +15,12 @@ from modules.api.auth.functions import (
 )
 import os
 from jose import JWTError, jwt
-from modules.api.users.functions import get_user_by_email, oauth2_scheme
+from modules.api.users.functions import get_user_by_email, oauth2_scheme, get_current_user
 from modules.api.auth.functions import find_refresh_token
 from modules.api.auth.security import anonymize, hash_token
 from fastapi.responses import JSONResponse
 from uuid import uuid4
+from typing import List
 
 load_dotenv()
 
@@ -42,7 +45,7 @@ def login_for_access_token(
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
+    
     access_token_expires = timedelta(minutes=15)
     refresh_token_expires = timedelta(days=7)
 
@@ -127,3 +130,20 @@ def refresh_token(
             "token_type": "bearer",
         }
     )
+
+@auth_router.get("/refresh-tokens", response_model=List[dict])
+def list_refresh_tokens(db: Session = Depends(get_users_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Accès interdit")
+
+    tokens = db.query(RefreshToken).all()
+    return [
+        {
+            "user_id": token.user_id,
+            "token": token.token[:10] + "...",  # masqué partiellement
+            "created_at": token.created_at,
+            "expires_at": token.expires_at,
+            "revoked": token.revoked,
+        }
+        for token in tokens
+    ]

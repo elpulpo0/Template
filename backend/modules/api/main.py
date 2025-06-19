@@ -9,8 +9,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-FRONTEND_URL = os.getenv("FRONTEND_URL")
-
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
 def create_app() -> FastAPI:
     app = FastAPI(
@@ -23,8 +22,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
-            "http://localhost:5173",                # VueJs local
-            FRONTEND_URL                            # Frontend
+            FRONTEND_URL
         ],
         allow_credentials=True,
         allow_methods=["*"],
@@ -42,3 +40,5 @@ def create_app() -> FastAPI:
         return RedirectResponse(url="/docs")
 
     return app
+
+app = create_app()

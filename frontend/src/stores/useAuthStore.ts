@@ -2,23 +2,37 @@ import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
 
 export const useAuthStore = defineStore('auth', () => {
-  // Utilisation de useStorage pour persister le rôle dans localStorage
-  const userRole = useStorage<string>('user_role', '');
+  // Récupération persistée et réactive
+  const userRole = useStorage<string>('role', '');
+  const token = useStorage<string>('token', '');
+  const email = useStorage<string>('email', '');
+  const name = useStorage<string>('name', '');
 
-  // Fonction pour mettre à jour le rôle
   const updateRole = (newRole: string) => {
     userRole.value = newRole;
-    localStorage.setItem('user_role', newRole);
+  };
+
+  const setAuthData = (auth: { token: string; email: string; name: string; role: string }) => {
+    token.value = auth.token;
+    email.value = auth.email;
+    name.value = auth.name;
+    userRole.value = auth.role;
   };
 
   const logout = () => {
+    token.value = '';
+    email.value = '';
+    name.value = '';
     userRole.value = '';
-    localStorage.removeItem('token');
-    localStorage.removeItem('user_email');
-    localStorage.removeItem('name');
-    localStorage.removeItem('user_role');
   };
-  
-  return { userRole, updateRole, logout };
 
+  return {
+    token,
+    email,
+    name,
+    userRole,
+    updateRole,
+    setAuthData,
+    logout
+  };
 });

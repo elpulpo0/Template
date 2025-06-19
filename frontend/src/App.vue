@@ -1,26 +1,23 @@
 <script setup lang="ts">
-import Auth from './components/Auth.vue';
-
+import Auth from './components/Auth.vue'
+import Footer from './components/Footer.vue'
 import { useAuthStore } from './stores/useAuthStore'
 
-// Importer le store
 const authStore = useAuthStore();
 
-// Gérer le changement de rôle utilisateur
 const handleRoleChange = (newRole: string) => {
   authStore.updateRole(newRole);
   localStorage.setItem('user_role', newRole);
 };
-
 </script>
 
 <template>
   <div>
     <header class="header">
-      <div>
+      <div class="left-section">
         <img src="./assets/logo.png" alt="Logo" class="logo" />
         <ul class="nav-links" v-if="['admin', 'editor', 'reader'].includes(authStore.userRole)">
-          <li><router-link to="/page1" class="nav-link">Page 1</router-link></li>
+          <li><router-link to="/users" class="nav-link">Users</router-link></li>
         </ul>
       </div>
       <Auth @updateRole="handleRoleChange" />
@@ -28,43 +25,46 @@ const handleRoleChange = (newRole: string) => {
 
     <!-- Affichage du contenu des routes -->
     <router-view></router-view>
+
+    <Footer />
   </div>
 </template>
 
 <style scoped>
-/* Styles généraux de la page */
+/* Police et couleurs type terminal */
 body {
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #000;
+  color: #00ff00;
 }
 
-/* Header */
+/* Header façon terminal */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: #333;
-  color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  color: #00ff00;
 }
 
+/* Logo */
 .logo {
   height: 100px;
   margin-bottom: 50px;
+  filter: brightness(0) saturate(100%) invert(68%) sepia(95%) saturate(330%) hue-rotate(74deg) brightness(93%) contrast(96%);
 }
 
 /* Navbar */
 .navbar {
-  background-color: #333333;
+  background-color: #000;
   padding: 10px 0;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 10;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #00ff00;
 }
 
 .navbar-container {
@@ -76,29 +76,24 @@ body {
   padding: 0 20px;
 }
 
+/* Liens de navigation façon terminal */
 .nav-links {
   display: flex;
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.nav-links li {
-  margin: 0 15px;
+  gap: 25px;
 }
 
 .nav-link {
   text-decoration: none;
-  color: white;
+  color: cyan;
   font-size: 16px;
   transition: color 0.3s;
+  font-family: 'Courier New', Courier, monospace;
 }
 
-.nav-link:hover {
-  color: #42b983;
-}
-
-/* Mobile menu toggle */
+/* Bouton menu hamburger (mobile) */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -110,7 +105,7 @@ body {
 .bar {
   width: 25px;
   height: 3px;
-  background-color: white;
-  border-radius: 5px;
+  background-color: #00ff00;
+  border-radius: 0;
 }
 </style>

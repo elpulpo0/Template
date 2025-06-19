@@ -2,13 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from modules.api.users.create_db import User
 from modules.api.users.schemas import UserResponse
 from utils.logger_config import configure_logger
 from modules.database.dependencies import get_users_db
 from modules.api.users.functions import get_current_user, get_user_by_email
 from modules.api.users.schemas import UserResponse, UserCreate, RoleUpdate, UserUpdate
-from modules.api.users.create_db import User, Role
+from modules.api.users.models import User, Role
 from modules.api.auth.security import anonymize, hash_password
 
 # Configuration du logger
@@ -209,3 +208,40 @@ def update_current_user(
         is_active=user.is_active,
         role=user.role.role,
     )
+
+@users_router.patch("/users/{user_id}", response_model=UserResponse)
+def admin_update_user(
+    user_id: int,
+    update_data: UserUpdate,
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_users_db),
+):
+    if "admin" not in current_user.scopes:
+        raise HTTPException(
+            status_code=403, detail="Accès refusé : réservé aux administrateurs."
+        )
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+
+    if update_data.name:
+        user.name = update_data.name
+
+    if update_data.email:
+        user.email = anonymize(update_data.email)
+
+    if update_data.password:
+        user.password = hash_password(update_data.password)
+
+    db.commit()
+    db.refresh(user)
+
+    return UserResponse(
+        id=user.id,
+        name=user.name,
+        email=user.email,
+        is_active=user.is_active,
+        role=user.role.role,
+    )
+
