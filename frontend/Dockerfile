@@ -1,5 +1,5 @@
 # Étape 1: Build de l'application
-FROM node:slim AS builder
+FROM node:alpine AS builder
 WORKDIR /app
 
 # Copier uniquement les fichiers de dépendances pour optimiser le cache
@@ -9,9 +9,10 @@ RUN npm install
 # Copier le reste des fichiers et construire l'application
 COPY . .
 RUN npm run build
+RUN cp build-meta.json dist/
 
 # Étape 2: Serveur léger avec http-server
-FROM node:slim
+FROM node:alpine
 
 # Définir un répertoire de travail
 WORKDIR /usr/share/app
@@ -24,6 +25,9 @@ ENV NODE_ENV=production
 
 # Copier les fichiers générés de la build dans le conteneur
 COPY --from=builder /app/dist .
+
+# Installer 'shadow' pour avoir useradd, et bash
+RUN apk add --no-cache shadow bash
 
 # Créer un utilisateur non-root
 RUN useradd -ms /bin/bash appuser

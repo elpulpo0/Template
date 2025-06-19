@@ -15,7 +15,7 @@ services:
     ports:
       - "${PORT_BACK}:${PORT_BACK}"
     networks:
-      - ${APP_NAME}_network
+      - app_network
 
   frontend:
     container_name: ${APP_NAME}_frontend
@@ -33,10 +33,10 @@ services:
     ports:
       - "${PORT_FRONT}:8081"
     networks:
-      - ${APP_NAME}_network
+      - app_network
 
 networks:
-  ${APP_NAME}_network:
+  app_network:
     driver: bridge
 
 volumes:
