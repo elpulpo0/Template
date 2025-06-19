@@ -19,7 +19,7 @@ const commitHash = import.meta.env.VITE_APP_LAST_COMMIT_HASH
 const commitMessage = import.meta.env.VITE_APP_LAST_COMMIT_MESSAGE
 const githubUrl = import.meta.env.VITE_GITHUB_URL
 const commitUrl = `${githubUrl}/commit/${commitHash}`
-const app_name = import.meta.env.VITE_GITHUB_URL
+const app_name = import.meta.env.VITE_APP_NAME
 </script>
 
 <style scoped>
