@@ -4,10 +4,12 @@
 
 ```sh
 template/
-├── backend/                                   # Code backend de l'application (API, logique serveur)
-│   ├── Dockerfile                             # Dockerfile pour construire l'image backend
+# Authentification part
+├── auth/                                      # Code backend de la gestion des authentifications (API, logique serveur)
+│   ├── Dockerfile                             # Dockerfile pour construire l'image auth
 │   ├── database/                              # Fichiers db générés
 │   ├── logs/                                  # Fichiers de logs (erreurs, debug, info)
+│   ├── tests/                                 # Fichiers de tests (pytest)
 │   ├── modules/                               # Modules Python principaux
 │   │   ├── api/                               # API REST (FastAPI, routes, schémas...)
 │   │   │   ├── auth/                          # Authentification (routes, modèles, sécurité)
@@ -16,7 +18,8 @@ template/
 │   │   │   │   ├── routes.py
 │   │   │   │   ├── schemas.py
 │   │   │   │   └── security.py
-│   │   │   ├── main.py                        # Point d'entrée FastAPI backend
+│   │   │   ├── main.py                        # Point d'entrée FastAPI
+│   │   │   ├── requirements.txt               # Dépendances Python
 │   │   │   └── users/                         # Gestion utilisateurs (modèles, routes...)
 │   │   │       ├── create_db.py
 │   │   │       ├── functions.py
@@ -29,13 +32,20 @@ template/
 │   │       ├── config.py
 │   │       ├── dependencies.py
 │   │       └── session.py
-│   ├── requirements.txt                       # Dépendances Python du backend
 │   └── utils/
 │       └── logger_config.py                   # Configuration du logger
-├── bonus_scripts/                             # Scripts utilitaires pour dev ou gestion
-│   ├── generate_secret_key.py                 # Script pour générer une clé secrète (ex: JWT)
-│   └── print_tree.py                          # Script pour afficher l’arborescence du projet
-├── docker-compose.yml                         # Orchestration Docker (backend + frontend)
+
+# Backend part
+├── backend/                                   # Code backend de l'application (API, logique serveur)
+│   ├── Dockerfile                             # Dockerfile pour construire l'image auth
+│   ├── config/
+│   │   └── settings.py                        # Ficher de configuration
+│   ├── logs/                                  # Fichiers de logs (erreurs, debug, info)
+│   ├── tests/                                 # Fichiers de tests (pytest)
+│   ├── main.py                                # Point d'entrée FastAPI
+│   └── routes.py
+
+# Frontend part
 ├── frontend/                                  # Code frontend de l’application (Vue.js)
 │   ├── Dockerfile                             # Dockerfile pour construire l’image frontend
 │   ├── index.html                             # Page HTML principale
@@ -59,6 +69,14 @@ template/
 │       │   └── useAuthStore.ts
 │       └── styles/                            # Fichiers CSS / styles globaux
 │           └── styles.css
+
+# Others
+├── bonus_scripts/                             # Scripts utilitaires pour dev ou gestion
+│   ├── generate_secret_key.py                 # Script pour générer une clé secrète (ex: JWT)
+│   └── print_tree.py                          # Script pour afficher l’arborescence du projet
+├── docker-compose.yml                         # Orchestration Docker (backend + frontend)
+├── requirements.txt                           # Dépendances Python (dev local)
+├── run_auth.py                                # Script pour lancer la gestion des authentifications (dev local)
 ├── run_backend.py                             # Script pour lancer le backend (dev local)
 └── run_frontend.py                            # Script pour lancer le frontend (dev local)
 ```
@@ -81,6 +99,7 @@ cp .env.example .env
 SECRET_KEY=     # Generate a new secret key with this script : bonus_scripts\generate_secret_key.py
 GITHUB_URL=     # The address of your git repository
 APP_NAME=       # The name of your application
+AUTH_BACK=      # The port you want to use for the authentification part of your application
 PORT_BACK=      # The port you want to use for the backend of your application
 PORT_FRONT=     # The port you want to use for the frontend of your application
 ```
@@ -91,32 +110,24 @@ PORT_FRONT=     # The port you want to use for the frontend of your application
 cp backend/modules/api/users/initial_users.yaml.example backend/modules/api/users/initial_users.yaml
 ```
 
-**Launch with Docker**
+## Launch for production
 
 ```sh
 docker compose up -d --build
 ```
 
-## Available services with Docker Compose
+**Available services with Docker Compose**
 
-- **FastAPI** → http://localhost:{PORT_BACK}
+- **Authantification / Users API** → http://localhost:{PORT_AUTH}
 - **Prefect UI** → http://localhost:4200
 - **Uptime Kuma** → http://localhost:3001
 - **Frontend** → http://localhost:{PORT_FRONT}
 
 **Configure Kuma**
 
-Visit http://localhost:3001 et add the API health check : http://api:{PORT_BACK}/health and a notification through Discord or Telegram.
+Visit http://localhost:3001 et add the API health check : http://api:{PORT_AUTH}/health and a notification through Discord or Telegram.
 
-**Launch in local mode**
-
-Open 2 different terminals:
-
-# Backend (in terminal 1)
-
-```sh
-cd backend
-```
+## Launch in local mode
 
 **Create a virtual environnement**
 
@@ -140,27 +151,24 @@ python.exe -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-**Run the app**
+Open 3 different terminals:
+
+**Backend (in terminal 1)**
 
 ```sh
-cd ../ && python run_backend.py
+python run_backend.py
 ```
 
-# Frontend (in terminal 2)
+**Frontend (in terminal 2)**
 
 ```sh
-cd frontend
-```
-
-**Install dependencies**
-
-```sh
-npm install
-```
-
-**Run the app**
-
-```sh
+cd frontend && npm install
 cd ../ && python run_frontend.py
+```
+
+**Authentification (in terminal 3)**
+
+```sh
+python run_auth.py
 ```
 

@@ -10,14 +10,11 @@ from modules.api.users.schemas import UserResponse, UserCreate, RoleUpdate, User
 from modules.api.users.models import User, Role
 from modules.api.auth.security import anonymize, hash_password
 
-# Configuration du logger
 logger = configure_logger()
 
-# Gestion de l'authentification avec OAuth2
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 users_router = APIRouter()
-
 
 @users_router.get("/users/me", response_model=UserResponse)
 def read_users_me(
@@ -26,7 +23,7 @@ def read_users_me(
     user = get_user_by_email(current_user.sub, db)
 
     if not user:
-        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+        raise HTTPException(status_code=404, detail="User not found")
 
     return UserResponse(
         id=user.id,
@@ -40,14 +37,13 @@ def read_users_me(
 @users_router.get(
     "/users/{user_id}",
     response_model=UserResponse,
-    summary="Récupérer un utilisateur par son ID",
-    description="Retourne les informations d'un utilisateur "
-    "spécifique en fonction de son ID.",
+    summary="Retrieve a user by ID",
+    description="Returns the information of a specific user based on their ID.",
 )
 def get_user(user_id: int, db: Session = Depends(get_users_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+        raise HTTPException(status_code=404, detail="User not found")
 
     return UserResponse(
         id=user.id,
@@ -65,13 +61,11 @@ def get_all_users(
     if "admin" not in current_user.scopes:
         raise HTTPException(
             status_code=403,
-            detail="Accès refusé : réservé aux administrateurs.",
+            detail="Access denied: administrators only."
         )
 
-    # Récupérer tous les utilisateurs de la base de données
     users = db.query(User).all()
 
-    # Retourner les utilisateurs sous forme de liste de UserResponse
     return [
         UserResponse(
             id=u.id,
@@ -93,19 +87,17 @@ def delete_user(
     if "admin" not in current_user.scopes:
         raise HTTPException(
             status_code=403,
-            detail="Accès refusé : réservé aux administrateurs.",
+            detail="Access denied: administrators only.",
         )
 
-    # Recherche de l'utilisateur à supprimer dans la base de données
     user_to_delete = db.query(User).filter(User.id == user_id).first()
     if not user_to_delete:
-        raise HTTPException(status_code=404, detail="Utilisateur non trouvé.")
+        raise HTTPException(status_code=404, detail="User not found.")
 
-    # Suppression de l'utilisateur
     db.delete(user_to_delete)
     db.commit()
 
-    return JSONResponse({"message": "Utilisateur supprimé"})
+    return JSONResponse({"message": "User deleted"})
 
 
 @users_router.post(
@@ -117,12 +109,12 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_users_db)):
     if existing_user:
         raise HTTPException(
             status_code=400,
-            detail="Un utilisateur avec cet email existe déjà",
+            detail="A user with this email already exists."
         )
 
     role_obj = db.query(Role).filter_by(role="reader").first()
     if not role_obj:
-        raise HTTPException(status_code=500, detail="Le rôle 'reader' est introuvable")
+        raise HTTPException(status_code=500, detail="The role 'reader' could not be found.")
 
     new_user = User(
         email=anonymized_email,
@@ -154,28 +146,25 @@ def update_user_role(
 ):
     if "admin" not in current_user.scopes:
         raise HTTPException(
-            status_code=403, detail="Accès refusé : réservé aux administrateurs."
+            status_code=403, detail="Access denied: administrators only."
         )
 
-    # Recherche de l'utilisateur à modifier dans la base de données
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(
-            status_code=404, detail="Utilisateur à modifier non trouvé."
+            status_code=404, detail="User not found."
         )
 
-    # Recherche du nouveau rôle à assigner à l'utilisateur
     new_role = db.query(Role).filter(Role.role == role_update.role).first()
     if not new_role:
-        raise HTTPException(status_code=404, detail="Rôle non trouvé.")
+        raise HTTPException(status_code=404, detail="The role could not be found.")
 
-    # Mise à jour du rôle de l'utilisateur
     user.role_id = new_role.id
     db.commit()
     db.refresh(user)
 
     return JSONResponse(
-        {"message": f"Rôle de l'utilisateur mis à jour en '{new_role.role}'."}
+        {"message": f"User role updated to '{new_role.role}'."}
     )
 
 
@@ -187,7 +176,7 @@ def update_current_user(
 ):
     user = get_user_by_email(current_user.sub, db)
     if not user:
-        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+        raise HTTPException(status_code=404, detail="User not found.")
 
     if update_data.name:
         user.name = update_data.name
@@ -218,12 +207,12 @@ def admin_update_user(
 ):
     if "admin" not in current_user.scopes:
         raise HTTPException(
-            status_code=403, detail="Accès refusé : réservé aux administrateurs."
+            status_code=403, detail="Access denied: administrators only."
         )
 
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+        raise HTTPException(status_code=404, detail="User not found.")
 
     if update_data.name:
         user.name = update_data.name

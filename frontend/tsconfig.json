@@ -15,7 +15,7 @@
     "noFallthroughCasesInSwitch": true,
     "downlevelIteration": true,
     "jsx": "preserve",
-    "types": ["vue"]  // Vérifie que cette ligne est là
+    "types": ["vue"]
   },
   "include": [
     "src/**/*.ts",

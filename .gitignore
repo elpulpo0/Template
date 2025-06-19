@@ -46,8 +46,12 @@ __init__.py
 .vscode/
 .idea/
 
+# Uptime-Kuma files
+monitoring/uptime-kuma/*
+
 # Generated Data
-backend/database/*
+auth/database/*
+auth/logs/*
+auth/modules/api/users/initial_users.yaml
+backend/db/*
 backend/logs/*
-backend/excel/
-backend/modules/api/users/initial_users.yaml

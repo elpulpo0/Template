@@ -3,10 +3,9 @@ import os
 import sys
 from pathlib import Path
 
-# Ajouter la racine du projet dans sys.path pour que l'import fonctionne
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from backend.utils.logger_config import configure_logger
+from auth.utils.logger_config import configure_logger
 
 logger = configure_logger()
 

@@ -6,25 +6,22 @@ import { resolve } from 'path'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
 
-  // Lecture de version dans package.json
   const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
-  // Formattage de la date
   const months = [
-    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ]
   const now = new Date()
   const formattedDate = `${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]} ${now.getFullYear()}`
 
-  // Lecture du fichier build-meta.json si dispo
-  let buildMeta = { hash: 'inconnu', message: 'message indisponible' }
+  let buildMeta = { hash: 'unknown', message: 'message unavailable' }
   try {
     const buildMetaPath = resolve(__dirname, 'build-meta.json')
     const raw = readFileSync(buildMetaPath, 'utf-8')
     buildMeta = JSON.parse(raw)
   } catch (e) {
-    console.warn('⚠️ Aucun fichier build-meta.json trouvé, valeurs par défaut utilisées.')
+    console.warn('⚠️ No build-meta.json file found, using default values.')
   }
 
   return {

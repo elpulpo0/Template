@@ -46,6 +46,6 @@ def print_tree(start_path=".", prefix=""):
             print(f"{prefix}{connector}{entry}")
 
 if __name__ == "__main__":
-    app_name = os.getenv("APP_NAME", "MyApp")
+    app_name = os.getenv("APP_NAME", "Template")
     print(f"{app_name}/")
     print_tree()

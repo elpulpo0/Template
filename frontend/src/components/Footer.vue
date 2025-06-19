@@ -1,10 +1,10 @@
 <template>
   <footer class="footer">
     <p class="copyright">
-      © {{ new Date().getFullYear() }} El Pulpo — Tous droits réservés.
+      © {{ new Date().getFullYear() }} El Pulpo — All rights reserved.
     </p>
     <p>
-      {{ app_name ? (app_name.charAt(0).toUpperCase() + app_name.slice(1)) : '' }} v{{ version }} – dernière mise à jour le {{ buildDate }}
+      {{ app_name ? (app_name.charAt(0).toUpperCase() + app_name.slice(1)) : '' }} v{{ version }} – last update: {{ buildDate }}
     </p>
     <p class="copyright">
       commit: <a :href="commitUrl" target="_blank" rel="noopener">{{ commitHash }}</a> ({{ commitMessage }})

@@ -24,7 +24,6 @@ from typing import List
 
 load_dotenv()
 
-# Configuration du logger
 logger = configure_logger()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -140,7 +139,7 @@ def list_refresh_tokens(db: Session = Depends(get_users_db), current_user: User 
     return [
         {
             "user_id": token.user_id,
-            "token": token.token[:10] + "...",  # masqué partiellement
+            "token": token.token[:10] + "...",
             "created_at": token.created_at,
             "expires_at": token.expires_at,
             "revoked": token.revoked,

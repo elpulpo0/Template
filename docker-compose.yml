@@ -1,4 +1,22 @@
 services:
+  auth:
+    container_name: ${APP_NAME}_auth
+    image: ${APP_NAME}_auth
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - auth-database:/app/database
+      - auth-logs:/app/logs
+    env_file:
+      - .env
+    command: ["uvicorn", "modules.api.main:app", "--host", "0.0.0.0", "--port", "${PORT_AUTH}", "--log-level", "warning"]
+    ports:
+      - "${PORT_AUTH}:${PORT_AUTH}"
+    networks:
+      - app_network
+
   backend:
     container_name: ${APP_NAME}_backend
     image: ${APP_NAME}_backend
@@ -7,15 +25,14 @@ services:
       dockerfile: Dockerfile
     restart: always
     volumes:
-      - database:/app/database
-      - logs:/app/logs
+      - backend-logs:/app/logs
     env_file:
       - .env
-    command: ["uvicorn", "modules.api.main:app", "--host", "0.0.0.0", "--port", "${PORT_BACK}", "--log-level", "warning"]
+    # command: ["uvicorn", "modules.api.main:app", "--host", "0.0.0.0", "--port", "${PORT_BACK}", "--log-level", "warning"]
     ports:
       - "${PORT_BACK}:${PORT_BACK}"
     networks:
-      - app_network
+      - app_network:
 
   frontend:
     container_name: ${APP_NAME}_frontend
@@ -28,7 +45,7 @@ services:
         VITE_GITHUB_URL: ${GITHUB_URL}
     restart: always
     environment:
-      - VITE_BACKEND_URL="http://backend:${PORT_BACK}"
+      - VITE_BACKEND_URL="http://backend:${PORT_AUTH}"
       - VITE_APP_NAME="${APP_NAME}"
       - VITE_GITHUB_URL="${GITHUB_URL}"
     env_file:
@@ -40,10 +57,26 @@ services:
     networks:
       - app_network
 
+  kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: kuma
+    depends_on:
+      - auth
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./monitoring/uptime-kuma:/app/data
+    restart: unless-stopped
+    networks:
+      - app_network
+
 networks:
   app_network:
     driver: bridge
 
 volumes:
-  database:
-  logs:
+  auth-database:
+  auth-logs:
+  uptime-kuma:
+  backend-logs:
+

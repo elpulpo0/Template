@@ -9,10 +9,8 @@ from sqlalchemy.orm import Session
 from modules.api.auth.models import RefreshToken
 
 
-# Configuration du logger
 logger = configure_logger()
 
-# Charger les variables d'environnement
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -28,7 +26,6 @@ def create_token(data: dict, expires_delta: timedelta = None):
     scopes_map = {"admin": ["admin"], "reader": ["reader"]}
     scopes = scopes_map.get(role, [])
 
-    # Déterminer le type du token
     token_type = data.get("type", "access")
     to_encode["token_type"] = token_type
 
@@ -40,9 +37,9 @@ def create_token(data: dict, expires_delta: timedelta = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
     if token_type == "access":
-        logger.info(f"Token {token_type} créé (role: {role}) – Expiration : {expire.strftime("%Y-%m-%d %H:%M:%S")}")
+        logger.info(f"Token {token_type} créé (role: {role}) – Expiration : {expire.strftime('%Y-%m-%d %H:%M:%S')}")
     else:
-        logger.info(f"Token {token_type} créé – Expiration : {expire.strftime("%Y-%m-%d %H:%M:%S")}")
+        logger.info(f"Token {token_type} créé – Expiration : {expire.strftime('%Y-%m-%d %H:%M:%S')}")
 
     return encoded_jwt
 
@@ -50,13 +47,10 @@ def create_token(data: dict, expires_delta: timedelta = None):
 def authenticate_user(db: Session, email: str, password: str):
     """Authentifie un utilisateur en vérifiant son email et son mot de passe."""
 
-    # Hacher l'email fourni par l'utilisateur pour la comparaison
     anonymized_email = anonymize(email)  # Hacher l'email
 
-    # Récupérer l'utilisateur en utilisant l'email haché
     user = get_user_by_email(anonymized_email, db)
 
-    # Vérifier si l'utilisateur existe et si le mot de passe est valide
     if not user:
         logger.info("Utilisateur non trouvé.")
         return False
@@ -70,13 +64,11 @@ def authenticate_user(db: Session, email: str, password: str):
 
 
 def store_refresh_token(db: Session, user_id: int, token: str, expires_at: datetime):
-    # Révoque les anciens tokens actifs pour l'utilisateur et la même application
     db.query(RefreshToken).filter(
         RefreshToken.user_id == user_id,
         RefreshToken.revoked == False
     ).update({RefreshToken.revoked: True}, synchronize_session=False)
 
-    # Ajoute le nouveau token
     refresh_token = RefreshToken(
         token=token,
         user_id=user_id,

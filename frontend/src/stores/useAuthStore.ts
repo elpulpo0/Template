@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
 
 export const useAuthStore = defineStore('auth', () => {
-  // Récupération persistée et réactive
   const userRole = useStorage<string>('role', '');
   const token = useStorage<string>('token', '');
   const email = useStorage<string>('email', '');

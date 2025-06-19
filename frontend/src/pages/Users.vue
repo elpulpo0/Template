@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import axios from 'axios'
-import { backend_url } from '../functions/utils'
+import { auth_url } from '../functions/utils'
 import { useAuthStore } from '../stores/useAuthStore'
 const authStore = useAuthStore();
 
@@ -24,9 +24,9 @@ const editPassword = ref('');
 
 const fetchUsers = async () => {
   loading.value = true;
-  error.value = ''; // reset previous error
+  error.value = '';
   try {
-    const { data } = await axios.get(`${backend_url}/users/users`, {
+    const { data } = await axios.get(`${auth_url}/users/users`, {
       headers: {
         Authorization: `Bearer ${authStore.token}`
       }
@@ -35,17 +35,15 @@ const fetchUsers = async () => {
     if (Array.isArray(data)) {
       users.value = data;
     } else {
-      throw new Error('Données utilisateurs invalides');
+      throw new Error('Invalid user data');
     }
 
-    // Ensuite, récupérer les tokens associés à chaque utilisateur
-    const { data: tokensData } = await axios.get(`${backend_url}/auth/refresh-tokens`, {
+    const { data: tokensData } = await axios.get(`${auth_url}/auth/refresh-tokens`, {
       headers: {
         Authorization: `Bearer ${authStore.token}`
       }
     });
 
-    // Associer les tokens aux utilisateurs
     tokensData.forEach((tokenData: any) => {
       const user = users.value.find(user => user.id === tokenData.user_id);
       if (user) {
@@ -62,18 +60,18 @@ const fetchUsers = async () => {
       }
     });
   } catch (err: any) {
-    console.error('Erreur lors de la récupération des utilisateurs et tokens', err);
+    console.error('Error while fetching users and tokens', err);
 
     if (axios.isAxiosError(err)) {
       if (err.response?.status === 403) {
-        error.value = '⛔ Accès refusé : vous n\'avez pas les droits pour consulter les utilisateurs.';
+        error.value = '⛔ Access denied: you do not have permission to view the users.';
       } else if (err.response?.status === 401) {
-        error.value = '🔐 Session expirée. Veuillez vous reconnecter.';
+        error.value = '🔐 Session expired. Please log in again.';
       } else {
-        error.value = 'Une erreur est survenue lors de la récupération des utilisateurs et tokens.';
+        error.value = 'An error occurred while fetching users and tokens.';
       }
     } else {
-      error.value = 'Erreur inconnue.';
+      error.value = '	Unknown error.';
     }
   } finally {
     loading.value = false;
@@ -101,7 +99,7 @@ const submitEdit = async (userId: number) => {
     if (editEmail.value) updatePayload.email = editEmail.value;
     if (editPassword.value) updatePayload.password = editPassword.value;
 
-    await axios.patch(`${backend_url}/users/users/${userId}`, updatePayload, {
+    await axios.patch(`${auth_url}/users/users/${userId}`, updatePayload, {
       headers: {
         Authorization: `Bearer ${authStore.token}`
       }
@@ -110,36 +108,36 @@ const submitEdit = async (userId: number) => {
     cancelEdit();
     fetchUsers();
   } catch (err) {
-    console.error('Erreur de mise à jour', err);
-    error.value = 'Erreur lors de la mise à jour de l’utilisateur.';
+    console.error('Update error', err);
+    error.value = 'Error while updating the user.';
   }
 };
 
 const updateRole = async (userId: number, newRole: string) => {
   try {
-    await axios.patch(`${backend_url}/users/users/${userId}/role`, { role: newRole }, {
+    await axios.patch(`${auth_url}/users/users/${userId}/role`, { role: newRole }, {
       headers: {
         Authorization: `Bearer ${authStore.token}`
       }
     })
     fetchUsers()
   } catch (err) {
-    console.error('Erreur lors de la mise à jour du rôle', err)
-    error.value = 'Erreur lors de la mise à jour du rôle.'
+    console.error('Error while updating the role', err)
+    error.value = 'Error while updating the role'
   }
 }
 
 const deleteUser = async (userId: number) => {
   try {
-    await axios.delete(`${backend_url}/users/users/${userId}`, {
+    await axios.delete(`${auth_url}/users/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${authStore.token}`
       }
     })
     fetchUsers()
   } catch (err) {
-    console.error('Erreur lors de la suppression de l\'utilisateur', err)
-    error.value = 'Erreur lors de la suppression de l\'utilisateur.'
+    console.error('Error while deleting the user', err)
+    error.value = 'Error while deleting the user'
   }
 }
 
@@ -152,25 +150,25 @@ watch(
       users.value = [];
     }
   },
-  { immediate: true } // pour appeler aussi au montage
+  { immediate: true }
 );
 
 </script>
 
 <template>
   <div v-if="['admin', 'editor', 'reader'].includes(authStore.userRole)">
-    <div v-if="loading">Chargement des utilisateurs...</div>
+    <div v-if="loading">Loading users...</div>
     <div v-if="error">{{ error }}</div>
 
     <div v-if="users.length" class="module">
-      <h2>Utilisateurs</h2>
+      <h2>Users</h2>
       <table>
         <thead>
           <tr>
-            <th class="recoltes small">Nom</th>
-            <th class="recoltes small">Rôle</th>
-            <th class="recoltes small">Actif</th>
-            <th class="recoltes small">Connexions</th>
+            <th class="recoltes small">Name</th>
+            <th class="recoltes small">Role</th>
+            <th class="recoltes small">Active</th>
+            <th class="recoltes small">Last Session</th>
             <th v-if="['admin'].includes(authStore.userRole)" class="recoltes small">Actions</th>
           </tr>
         </thead>
@@ -183,7 +181,6 @@ watch(
               <span v-else>❌</span>
             </td>
             <td>
-              <!-- Affichage des tokens associés à l'utilisateur -->
               <ul>
                 <div v-for="token in user.tokens">
                   {{ new Date(token.created_at).toLocaleDateString() }}
@@ -196,22 +193,21 @@ watch(
             </td>
             <td v-if="['admin'].includes(authStore.userRole) && editingUserId == user.id">
               <form class="form-section">
-                <input class="form-input" v-model="editName" placeholder="Nom" />
+                <input class="form-input" v-model="editName" placeholder="Name" />
                 <input class="form-input" v-model="editEmail" placeholder="Email" />
-                <input class="form-input" v-model="editPassword" placeholder="Mot de passe" />
-                <button v-if="user.role === 'reader'" @click="updateRole(user.id, 'editor')">Rendre Editeur</button>
+                <input class="form-input" v-model="editPassword" placeholder="Password" />
+                <button v-if="user.role === 'reader'" @click="updateRole(user.id, 'editor')">Make Editor</button>
               </form>
-              <button @click="submitEdit(user.id)">Enregistrer</button>
-              <button @click="cancelEdit">Annuler</button>
+              <button @click="submitEdit(user.id)">Save</button>
+              <button @click="cancelEdit">Cancel</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-  <!-- Message si l'utilisateur n'est pas connecté -->
   <div v-else>
-    <h2>🔒 Connexion requise</h2>
-    <p>Veuillez vous connecter pour accéder aux fonctionnalités de l’application.</p>
+    <h2>🔒 Login required</h2>
+    <p>Please log in to access the application's features.</p>
   </div>
 </template>

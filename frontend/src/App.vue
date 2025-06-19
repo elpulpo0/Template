@@ -2,6 +2,7 @@
 import Auth from './components/Auth.vue'
 import Footer from './components/Footer.vue'
 import { useAuthStore } from './stores/useAuthStore'
+import { onMounted } from 'vue'
 
 const authStore = useAuthStore();
 
@@ -9,6 +10,11 @@ const handleRoleChange = (newRole: string) => {
   authStore.updateRole(newRole);
   localStorage.setItem('user_role', newRole);
 };
+
+onMounted(() => {
+  const appName = import.meta.env.VITE_APP_NAME || 'Template';
+  document.title = appName.charAt(0).toUpperCase() + appName.slice(1);
+});
 </script>
 
 <template>
@@ -18,12 +24,12 @@ const handleRoleChange = (newRole: string) => {
         <img src="./assets/logo.png" alt="Logo" class="logo" />
         <ul class="nav-links" v-if="['admin', 'editor', 'reader'].includes(authStore.userRole)">
           <li><router-link to="/users" class="nav-link">Users</router-link></li>
+          <li><router-link to="/api" class="nav-link">Api</router-link></li>
         </ul>
       </div>
       <Auth @updateRole="handleRoleChange" />
     </header>
 
-    <!-- Affichage du contenu des routes -->
     <router-view></router-view>
 
     <Footer />
@@ -31,7 +37,6 @@ const handleRoleChange = (newRole: string) => {
 </template>
 
 <style scoped>
-/* Police et couleurs type terminal */
 body {
   margin: 0;
   font-family: 'Courier New', Courier, monospace;
@@ -39,7 +44,6 @@ body {
   color: #00ff00;
 }
 
-/* Header façon terminal */
 .header {
   display: flex;
   justify-content: space-between;
@@ -48,14 +52,11 @@ body {
   color: #00ff00;
 }
 
-/* Logo */
 .logo {
-  height: 100px;
+  height: 150px;
   margin-bottom: 50px;
-  filter: brightness(0) saturate(100%) invert(68%) sepia(95%) saturate(330%) hue-rotate(74deg) brightness(93%) contrast(96%);
 }
 
-/* Navbar */
 .navbar {
   background-color: #000;
   padding: 10px 0;
@@ -76,7 +77,6 @@ body {
   padding: 0 20px;
 }
 
-/* Liens de navigation façon terminal */
 .nav-links {
   display: flex;
   list-style: none;
@@ -93,7 +93,6 @@ body {
   font-family: 'Courier New', Courier, monospace;
 }
 
-/* Bouton menu hamburger (mobile) */
 .menu-toggle {
   display: none;
   flex-direction: column;
