@@ -8,7 +8,6 @@ os.chdir(backend_path)
 sys.path.insert(0, backend_path)
 
 from modules.api.users.create_db import init_users_db
-from modules.api.main import create_app
 
 load_dotenv()
 

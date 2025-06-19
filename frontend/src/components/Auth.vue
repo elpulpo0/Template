@@ -229,7 +229,8 @@ watch(() => authStore.token, async (newToken) => {
       <!-- Formulaire de connexion -->
       <form v-if="!isRegistering" @submit.prevent="login" :key="'login-form'">
         <input class="input-auth" type="email" id="email" v-model="email" placeholder="Email" autocomplete="username" />
-        <input class="input-auth" type="password" id="password" v-model="password" placeholder="Mot de passe" autocomplete="current-password" />
+        <input class="input-auth" type="password" id="password" v-model="password" placeholder="Mot de passe"
+          autocomplete="current-password" />
         <button type="button" @click="login">Se connecter</button>
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         <p v-if="successMessage" class="success">{{ successMessage }}</p>
@@ -240,8 +241,10 @@ watch(() => authStore.token, async (newToken) => {
       <form v-else @submit.prevent="register" :key="'register-form'">
         <input class="input-auth" type="email" v-model="email" placeholder="Email" autocomplete="username" />
         <input class="input-auth" type="name" v-model="name" placeholder="Nom" />
-        <input class="input-auth" type="password" v-model="password" placeholder="Mot de passe" autocomplete="new-password" />
-        <input class="input-auth" type="password" v-model="confirmPassword" placeholder="Confirmez le mot de passe" autocomplete="new-password" />
+        <input class="input-auth" type="password" v-model="password" placeholder="Mot de passe"
+          autocomplete="new-password" />
+        <input class="input-auth" type="password" v-model="confirmPassword" placeholder="Confirmez le mot de passe"
+          autocomplete="new-password" />
         <button type="submit">Créer un compte</button>
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         <p>Déjà un compte ? <a href="#" @click="isRegistering = false; resetMessages()">Se connecter</a></p>
@@ -265,16 +268,20 @@ watch(() => authStore.token, async (newToken) => {
           <h2>Modifier mes informations</h2>
           <form class="form-grid">
             <label for="newName">Nom</label>
-            <input class="input-auth" id="newName" type="text" v-model="newName" placeholder="nom" autocomplete="name" />
+            <input class="input-auth" id="newName" type="text" v-model="newName" placeholder="nom"
+              autocomplete="name" />
 
             <label for="newEmail">Email</label>
-            <input class="input-auth" id="newEmail" type="email" v-model="newEmail" placeholder="email" autocomplete="email" />
+            <input class="input-auth" id="newEmail" type="email" v-model="newEmail" placeholder="email"
+              autocomplete="email" />
 
             <label for="newPassword">Mot de passe</label>
-            <input class="input-auth" id="newPassword" type="password" v-model="newPassword" placeholder="mot de passe" autocomplete="new-password" />
+            <input class="input-auth" id="newPassword" type="password" v-model="newPassword" placeholder="mot de passe"
+              autocomplete="new-password" />
 
             <label for="confirmPassword">Confirmez le mot de passe</label>
-            <input class="input-auth" id="confirmPassword" type="password" v-model="confirmPassword" placeholder="mot de passe" autocomplete="new-password" />
+            <input class="input-auth" id="confirmPassword" type="password" v-model="confirmPassword"
+              placeholder="mot de passe" autocomplete="new-password" />
           </form>
 
           <button @click.prevent="updateProfile">Enregistrer les modifications</button>
@@ -411,5 +418,4 @@ a:hover {
   gap: 24px;
   background-color: #000;
 }
-
 </style>
