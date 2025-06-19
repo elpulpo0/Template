@@ -23,17 +23,19 @@ const editEmail = ref('');
 const editPassword = ref('');
 
 const fetchUsers = async () => {
-  loading.value = true
+  loading.value = true;
+  error.value = ''; // reset previous error
   try {
     const { data } = await axios.get(`${backend_url}/users/users`, {
       headers: {
         Authorization: `Bearer ${authStore.token}`
       }
-    })
+    });
+
     if (Array.isArray(data)) {
-      users.value = data
+      users.value = data;
     } else {
-      throw new Error('Données utilisateurs invalides')
+      throw new Error('Données utilisateurs invalides');
     }
 
     // Ensuite, récupérer les tokens associés à chaque utilisateur
@@ -41,31 +43,42 @@ const fetchUsers = async () => {
       headers: {
         Authorization: `Bearer ${authStore.token}`
       }
-    })
+    });
 
     // Associer les tokens aux utilisateurs
     tokensData.forEach((tokenData: any) => {
-      const user = users.value.find(user => user.id === tokenData.user_id)
+      const user = users.value.find(user => user.id === tokenData.user_id);
       if (user) {
         if (!user.tokens) {
-          user.tokens = []
+          user.tokens = [];
         }
         if (!tokenData.revoked) {
           user.tokens.push({
             created_at: tokenData.created_at,
             expires_at: tokenData.expires_at,
             revoked: tokenData.revoked
-          })
+          });
         }
       }
-    })
-  } catch (err) {
-    console.error('Erreur lors de la récupération des utilisateurs et tokens', err)
-    error.value = 'Une erreur est survenue lors de la récupération des utilisateurs et tokens.'
+    });
+  } catch (err: any) {
+    console.error('Erreur lors de la récupération des utilisateurs et tokens', err);
+
+    if (axios.isAxiosError(err)) {
+      if (err.response?.status === 403) {
+        error.value = '⛔ Accès refusé : vous n\'avez pas les droits pour consulter les utilisateurs.';
+      } else if (err.response?.status === 401) {
+        error.value = '🔐 Session expirée. Veuillez vous reconnecter.';
+      } else {
+        error.value = 'Une erreur est survenue lors de la récupération des utilisateurs et tokens.';
+      }
+    } else {
+      error.value = 'Erreur inconnue.';
+    }
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const startEditing = (user: User) => {
   editingUserId.value = user.id;

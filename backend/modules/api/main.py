@@ -9,7 +9,8 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+PORT_FRONT = os.getenv("PORT_FRONT", "5173")  # attention, chaîne !
+FRONTEND_URL = os.getenv("FRONTEND_URL", f"http://localhost:{PORT_FRONT}")
 
 def create_app() -> FastAPI:
     app = FastAPI(
