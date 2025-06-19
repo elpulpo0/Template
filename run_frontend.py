@@ -7,12 +7,14 @@ load_dotenv()
 
 PORT_BACK = os.getenv("PORT_BACK")
 GITHUB_URL = os.getenv("GITHUB_URL")
+APP_NAME = os.getenv("APP_NAME")
 frontend_env_path = os.path.join("frontend", ".env")
 
 # 2. Créer / écraser frontend/.env
 with open(frontend_env_path, "w") as f:
     f.write(f"VITE_PORT_BACK={PORT_BACK}\n")
     f.write(f"VITE_GITHUB_URL={GITHUB_URL}\n")
+    f.write(f"VITE_APP_NAME={APP_NAME}\n")
 
 print(f"✅ VITE_PORT_BACK écrit dans {frontend_env_path}")
 

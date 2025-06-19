@@ -1,10 +1,10 @@
 <template>
   <footer class="footer">
     <p class="copyright">
-      © {{ new Date().getFullYear() }} Microphyt — Tous droits réservés.
+      © {{ new Date().getFullYear() }} EL Pulpo — Tous droits réservés.
     </p>
     <p class="copyright">
-      Admin Dashboard v{{ version }} – dernière mise à jour le {{ buildDate }}
+      {{ user.app_name.charAt(0).toUpperCase() + app_name.name.slice(1) }} v{{ version }} – dernière mise à jour le {{ buildDate }}
     </p>
     <p class="copyright">
       commit: <a :href="commitUrl" target="_blank" rel="noopener">{{ commitHash }}</a> ({{ commitMessage }})
@@ -19,6 +19,7 @@ const commitHash = import.meta.env.VITE_APP_LAST_COMMIT_HASH
 const commitMessage = import.meta.env.VITE_APP_LAST_COMMIT_MESSAGE
 const githubUrl = import.meta.env.VITE_GITHUB_URL
 const commitUrl = `${githubUrl}/commit/${commitHash}`
+const app_name = import.meta.env.VITE_GITHUB_URL
 </script>
 
 <style scoped>
