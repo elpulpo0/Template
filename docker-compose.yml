@@ -11,7 +11,7 @@ services:
       - auth-logs:/app/logs
     env_file:
       - .env
-    command: ["uvicorn", "modules.api.main:app", "--host", "0.0.0.0", "--port", "${PORT_AUTH}", "--log-level", "warning"]
+    command: ["uvicorn", "modules.api.main:app", "--host", "0.0.0.0", "--port", "${PORT_AUTH}", "--log-level", "info"]
     ports:
       - "${PORT_AUTH}:${PORT_AUTH}"
     networks:
@@ -28,7 +28,7 @@ services:
       - backend-logs:/app/logs
     env_file:
       - .env
-    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT_BACK}", "--log-level", "warning"]
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT_BACK}", "--log-level", "info"]
     ports:
       - "${PORT_BACK}:${PORT_BACK}"
     networks:
