@@ -10,13 +10,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p /app/db
 RUN mkdir -p /app/logs
 
-RUN chown -R appuser:appuser /app/database
 RUN chown -R appuser:appuser /app/logs
 
-RUN chmod -R 755 /app/database
 RUN chmod -R 755 /app/logs
 
 RUN chown -R appuser:appuser /app
