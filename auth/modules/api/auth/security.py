@@ -3,7 +3,8 @@ import bcrypt
 
 
 def anonymize(name: str) -> str:
-    """Return the SHA‑256 hash of a given first or last name, used to anonymize personal data."""
+    """Return the SHA‑256 hash of a given first or last name,
+    used to anonymize personal data."""
     return hashlib.sha256(name.encode("utf-8")).hexdigest()
 
 
