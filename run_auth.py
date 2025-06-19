@@ -17,4 +17,3 @@ if __name__ == "__main__":
     if os.getenv("RUN_ENV") != "test":
         init_users_db()
     uvicorn.run("auth.modules.api.main:app", host="0.0.0.0", port=PORT_AUTH, reload=True)
-

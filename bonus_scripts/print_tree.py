@@ -32,6 +32,7 @@ EXCLUDE = {
     "vite.config.js",
 }
 
+
 def print_tree(start_path=".", prefix=""):
     entries = [e for e in sorted(os.listdir(start_path)) if e not in EXCLUDE]
     entries_count = len(entries)
@@ -44,6 +45,7 @@ def print_tree(start_path=".", prefix=""):
             print_tree(path, prefix + extension)
         else:
             print(f"{prefix}{connector}{entry}")
+
 
 if __name__ == "__main__":
     app_name = os.getenv("APP_NAME", "Template")

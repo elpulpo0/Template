@@ -44,7 +44,7 @@ def login_for_access_token(
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     access_token_expires = timedelta(minutes=15)
     refresh_token_expires = timedelta(days=7)
 
@@ -81,29 +81,27 @@ def refresh_token(
         role = payload.get("role")
         token_type = payload.get("type")
         if token_type != "refresh":
-            raise HTTPException(
-                status_code=401, detail="Token invalide pour rafraîchissement"
-            )
+            raise HTTPException(status_code=401, detail="Invalid token for refresh")
     except JWTError:
-        raise HTTPException(status_code=401, detail="Token non valide")
+        raise HTTPException(status_code=401, detail="Invalid token")
 
     hashed_token = hash_token(token)
     refresh_token_db = find_refresh_token(db, hashed_token)
 
     if not refresh_token_db:
-        raise HTTPException(status_code=401, detail="Refresh token introuvable")
+        raise HTTPException(status_code=401, detail="Refresh token not found")
 
     if refresh_token_db.expires_at.replace(tzinfo=timezone.utc) < datetime.now(
         timezone.utc
     ):
-        raise HTTPException(status_code=401, detail="Refresh token expiré")
+        raise HTTPException(status_code=401, detail="Refresh token expired")
 
     refresh_token_db.revoked = True
 
     hashed_email = anonymize(email)
     user = get_user_by_email(hashed_email, db)
     if not user:
-        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+        raise HTTPException(status_code=404, detail="User not found.")
 
     new_access_token = create_token(
         data={"sub": email, "role": role}, expires_delta=timedelta(minutes=15)
@@ -130,10 +128,13 @@ def refresh_token(
         }
     )
 
+
 @auth_router.get("/refresh-tokens", response_model=List[dict])
-def list_refresh_tokens(db: Session = Depends(get_users_db), current_user: User = Depends(get_current_user)):
+def list_refresh_tokens(
+    db: Session = Depends(get_users_db), current_user: User = Depends(get_current_user)
+):
     if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Accès interdit")
+        raise HTTPException(status_code=403, detail="Access denied.")
 
     tokens = db.query(RefreshToken).all()
     return [

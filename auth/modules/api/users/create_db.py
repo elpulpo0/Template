@@ -34,7 +34,7 @@ def load_initial_users_config():
     """
     if not INITIAL_USERS_CONFIG_PATH.exists():
         raise FileNotFoundError(f"Config file not found: {INITIAL_USERS_CONFIG_PATH}")
-    with open(INITIAL_USERS_CONFIG_PATH, 'r') as f:
+    with open(INITIAL_USERS_CONFIG_PATH, "r") as f:
         return yaml.safe_load(f)
 
 
@@ -66,7 +66,7 @@ def create_roles_and_first_users():
                 name=user_cfg["name"],
                 password=hash_password(user_cfg["password"]),
                 role_id=role_id,
-                is_active=True
+                is_active=True,
             )
             db.add(user)
             db.commit()

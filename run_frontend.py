@@ -24,8 +24,10 @@ with open(frontend_env_path, "w") as f:
     f.write(f"VITE_GITHUB_URL={GITHUB_URL}\n")
     f.write(f"VITE_APP_NAME={APP_NAME}\n")
 
-logger.info(f"✅ Fichier '{frontend_env_path}' généré avec succès avec les valeurs : "
-            f"VITE_PORT={PORT_FRONT}, VITE_PORT_BACK={PORT_BACK}, VITE_PORT_AUTH={PORT_AUTH}, VITE_GITHUB_URL={GITHUB_URL}, VITE_APP_NAME={APP_NAME}")
+logger.info(
+    f"✅ Fichier '{frontend_env_path}' généré avec succès avec les valeurs : "
+    f"VITE_PORT={PORT_FRONT}, VITE_PORT_BACK={PORT_BACK}, VITE_PORT_AUTH={PORT_AUTH}, VITE_GITHUB_URL={GITHUB_URL}, VITE_APP_NAME={APP_NAME}"
+)
 
 # 3. Lancer npm run dev depuis frontend
 try:

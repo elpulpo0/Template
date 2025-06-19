@@ -26,6 +26,7 @@ oauth2_scheme = OAuth2PasswordBearer(
     },
 )
 
+
 def get_user_by_email(email: str, db: Session):
     """
     Retrieve a user from the database by anonymized email.

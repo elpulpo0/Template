@@ -16,6 +16,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 users_router = APIRouter()
 
+
 @users_router.get("/users/me", response_model=UserResponse)
 def read_users_me(
     current_user: dict = Depends(get_current_user), db: Session = Depends(get_users_db)
@@ -59,10 +60,7 @@ def get_all_users(
     current_user: dict = Depends(get_current_user), db: Session = Depends(get_users_db)
 ):
     if "admin" not in current_user.scopes:
-        raise HTTPException(
-            status_code=403,
-            detail="Access denied: administrators only."
-        )
+        raise HTTPException(status_code=403, detail="Access denied: administrators only.")
 
     users = db.query(User).all()
 
@@ -108,13 +106,14 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_users_db)):
     existing_user = get_user_by_email(anonymized_email, db)
     if existing_user:
         raise HTTPException(
-            status_code=400,
-            detail="A user with this email already exists."
+            status_code=400, detail="A user with this email already exists."
         )
 
     role_obj = db.query(Role).filter_by(role="reader").first()
     if not role_obj:
-        raise HTTPException(status_code=500, detail="The role 'reader' could not be found.")
+        raise HTTPException(
+            status_code=500, detail="The role 'reader' could not be found."
+        )
 
     new_user = User(
         email=anonymized_email,
@@ -145,15 +144,11 @@ def update_user_role(
     db: Session = Depends(get_users_db),
 ):
     if "admin" not in current_user.scopes:
-        raise HTTPException(
-            status_code=403, detail="Access denied: administrators only."
-        )
+        raise HTTPException(status_code=403, detail="Access denied: administrators only.")
 
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(
-            status_code=404, detail="User not found."
-        )
+        raise HTTPException(status_code=404, detail="User not found.")
 
     new_role = db.query(Role).filter(Role.role == role_update.role).first()
     if not new_role:
@@ -163,9 +158,7 @@ def update_user_role(
     db.commit()
     db.refresh(user)
 
-    return JSONResponse(
-        {"message": f"User role updated to '{new_role.role}'."}
-    )
+    return JSONResponse({"message": f"User role updated to '{new_role.role}'."})
 
 
 @users_router.patch("/users/me", response_model=UserResponse)
@@ -198,6 +191,7 @@ def update_current_user(
         role=user.role.role,
     )
 
+
 @users_router.patch("/users/{user_id}", response_model=UserResponse)
 def admin_update_user(
     user_id: int,
@@ -206,9 +200,7 @@ def admin_update_user(
     db: Session = Depends(get_users_db),
 ):
     if "admin" not in current_user.scopes:
-        raise HTTPException(
-            status_code=403, detail="Access denied: administrators only."
-        )
+        raise HTTPException(status_code=403, detail="Access denied: administrators only.")
 
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -233,4 +225,3 @@ def admin_update_user(
         is_active=user.is_active,
         role=user.role.role,
     )
-

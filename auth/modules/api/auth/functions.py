@@ -16,11 +16,10 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
+
 def create_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.now() + (
-        expires_delta if expires_delta else timedelta(minutes=60)
-    )
+    expire = datetime.now() + (expires_delta if expires_delta else timedelta(minutes=60))
 
     role = data.get("role")
     scopes_map = {"admin": ["admin"], "reader": ["reader"]}
@@ -37,36 +36,41 @@ def create_token(data: dict, expires_delta: timedelta = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
     if token_type == "access":
-        logger.info(f"Token {token_type} créé (role: {role}) – Expiration : {expire.strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.info(
+            f"Token {token_type} created (role: {role})"
+            f"Expire at {expire.strftime('%Y-%m-%d %H:%M:%S')}"
+        )
     else:
-        logger.info(f"Token {token_type} créé – Expiration : {expire.strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.info(
+            f"Token {token_type} created"
+            f"Expire at {expire.strftime('%Y-%m-%d %H:%M:%S')}"
+        )
 
     return encoded_jwt
 
 
 def authenticate_user(db: Session, email: str, password: str):
-    """Authentifie un utilisateur en vérifiant son email et son mot de passe."""
+    """Authenticate a user by verifying their email and password."""
 
-    anonymized_email = anonymize(email)  # Hacher l'email
+    anonymized_email = anonymize(email)
 
     user = get_user_by_email(anonymized_email, db)
 
     if not user:
-        logger.info("Utilisateur non trouvé.")
+        logger.info("User not found.")
         return False
 
     if not verify_password(password, user.password):
-        logger.info("Mot de passe invalide.")
+        logger.info("Invalid password.")
         return False
 
-    logger.info(f"{user.name.upper()} authentifié avec succès")
+    logger.info(f"{user.name.upper()} successfully authenticated")
     return user
 
 
 def store_refresh_token(db: Session, user_id: int, token: str, expires_at: datetime):
     db.query(RefreshToken).filter(
-        RefreshToken.user_id == user_id,
-        RefreshToken.revoked == False
+        RefreshToken.user_id == user_id, RefreshToken.revoked.is_(False)
     ).update({RefreshToken.revoked: True}, synchronize_session=False)
 
     refresh_token = RefreshToken(
