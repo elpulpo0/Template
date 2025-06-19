@@ -23,6 +23,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_APP_NAME: ${APP_NAME}
+        VITE_GITHUB_URL: ${GITHUB_URL}
     restart: always
     environment:
       - VITE_BACKEND_URL="http://backend:${PORT_BACK}"

@@ -2,6 +2,13 @@
 FROM node:alpine AS builder
 WORKDIR /app
 
+# ARG
+ARG VITE_APP_NAME
+ARG VITE_GITHUB_URL
+
+ENV VITE_APP_NAME=$VITE_APP_NAME
+ENV VITE_GITHUB_URL=$VITE_GITHUB_URL
+
 # Copier uniquement les fichiers de dépendances pour optimiser le cache
 COPY package.json package-lock.json ./
 RUN npm install
