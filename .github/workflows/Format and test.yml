@@ -30,9 +30,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install Node.js dependencies
-        run: |
-          cd frontend
-          npm install
+        run: npm ci
+        working-directory: ./frontend
 
       - name: Lint Python code with Ruff
         run: |
@@ -41,6 +40,7 @@ jobs:
       - name: Lint JavaScript/Vue with ESLint
         run: |
           npx eslint . --ext .js,.vue
+        working-directory: ./frontend
 
       - name: Run tests
         run: |
