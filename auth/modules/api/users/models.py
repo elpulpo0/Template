@@ -1,4 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
+from modules.api.auth.models import RefreshToken # Don't remove that line 
 from sqlalchemy.orm import relationship
 from modules.database.session import UsersBase
 

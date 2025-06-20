@@ -3,3 +3,5 @@ export const backend_url: string = import.meta.env.VITE_BACKEND_URL || `http://l
 
 const port_auth: string = import.meta.env.VITE_PORT_AUTH;
 export const auth_url: string = import.meta.env.VITE_AUTH_URL || `http://localhost:${port_auth}`;
+
+export const app_name: string = import.meta.env.VITE_APP_NAME;

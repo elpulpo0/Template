@@ -3,7 +3,8 @@ import { ref, watch } from 'vue';
 import api from '../axios';
 import axios from 'axios';
 import { useAuthStore } from '../stores/useAuthStore';
-import { auth_url } from '../functions/utils';
+import { auth_url, app_name } from '../functions/utils';
+
 
 const authStore = useAuthStore();
 
@@ -53,6 +54,7 @@ const login = async () => {
       new URLSearchParams({
         username: email.value,
         password: password.value,
+        scope: app_name
       }),
       {
         headers: {

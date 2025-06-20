@@ -11,7 +11,7 @@ type User = {
   email: string
   role: string
   is_active: boolean
-  tokens?: { created_at: string, expires_at: string, revoked: boolean }[]
+  tokens?: { app_name: string, created_at: string, expires_at: string, revoked: boolean }[]
 }
 
 const users = ref<User[]>([])
@@ -52,6 +52,7 @@ const fetchUsers = async () => {
         }
         if (!tokenData.revoked) {
           user.tokens.push({
+            app_name: tokenData.app,
             created_at: tokenData.created_at,
             expires_at: tokenData.expires_at,
             revoked: tokenData.revoked
@@ -181,10 +182,10 @@ watch(
               <span v-else>❌</span>
             </td>
             <td>
-              <ul>
-                <div v-for="token in user.tokens">
-                  {{ new Date(token.created_at).toLocaleDateString() }}
-                </div>
+              <ul class="token-list">
+                <li v-for="token in user.tokens" :key="token.app_name">
+                  <strong>{{ token.app_name }}</strong>: {{ new Date(token.created_at).toLocaleDateString() }}
+                </li>
               </ul>
             </td>
             <td v-if="['admin'].includes(authStore.userRole) && editingUserId !== user.id">
@@ -211,3 +212,11 @@ watch(
     <p>Please log in to access the application's features.</p>
   </div>
 </template>
+
+<style scoped>
+.token-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>

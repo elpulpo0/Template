@@ -1,4 +1,4 @@
-from modules.database.session import UsersSessionLocal
+from .session import UsersSessionLocal
 
 
 def get_users_db():

@@ -4,81 +4,82 @@
 
 ```sh
 template/
-# Authentification part
-├── auth/                                      # Code backend de la gestion des authentifications (API, logique serveur)
-│   ├── Dockerfile                             # Dockerfile pour construire l'image auth
-│   ├── database/                              # Fichiers db générés
-│   ├── logs/                                  # Fichiers de logs (erreurs, debug, info)
-│   ├── tests/                                 # Fichiers de tests (pytest)
-│   ├── modules/                               # Modules Python principaux
-│   │   ├── api/                               # API REST (FastAPI, routes, schémas...)
-│   │   │   ├── auth/                          # Authentification (routes, modèles, sécurité)
+# Authentication part
+├── auth/                                      # Backend code for authentication management (API, server logic)
+│   ├── Dockerfile                             # Dockerfile to build the auth image
+│   ├── database/                              # Generated database files
+│   ├── logs/                                  # Log files (errors, debug, info)
+│   ├── tests/                                 # Test files (pytest)
+│   ├── modules/                               # Main Python modules
+│   │   ├── api/                               # REST API (FastAPI, routes, schemas...)
+│   │   │   ├── auth/                          # Authentication (routes, models, security)
 │   │   │   │   ├── functions.py
 │   │   │   │   ├── models.py
 │   │   │   │   ├── routes.py
 │   │   │   │   ├── schemas.py
 │   │   │   │   └── security.py
-│   │   │   ├── main.py                        # Point d'entrée FastAPI
-│   │   │   ├── requirements.txt               # Dépendances Python
-│   │   │   └── users/                         # Gestion utilisateurs (modèles, routes...)
+│   │   │   ├── main.py                        # FastAPI entry point
+│   │   │   ├── requirements.txt              # Python dependencies
+│   │   │   └── users/                         # User management (models, routes...)
 │   │   │       ├── create_db.py
 │   │   │       ├── functions.py
-│   │   │       ├── initial_users.yaml         # Données utilisateurs initiales
-│   │   │       ├── initial_users.yaml.example # Exemple de fichier utilisateurs
+│   │   │       ├── initial_users.yaml         # Initial user data
+│   │   │       ├── initial_users.yaml.example # Example user file
 │   │   │       ├── models.py
 │   │   │       ├── routes.py
 │   │   │       └── schemas.py
-│   │   └── database/                          # Configuration et session de la base de données
+│   │   └── database/                          # Database configuration and session
 │   │       ├── config.py
 │   │       ├── dependencies.py
 │   │       └── session.py
 │   └── utils/
-│       └── logger_config.py                   # Configuration du logger
+│       └── logger_config.py                   # Logger configuration
 
 # Backend part
-├── backend/                                   # Code backend de l'application (API, logique serveur)
-│   ├── Dockerfile                             # Dockerfile pour construire l'image auth
+├── backend/                                   # Backend code for the application (API, server logic)
+│   ├── Dockerfile                             # Dockerfile to build the backend image
 │   ├── config/
-│   │   └── settings.py                        # Ficher de configuration
-│   ├── logs/                                  # Fichiers de logs (erreurs, debug, info)
-│   ├── tests/                                 # Fichiers de tests (pytest)
-│   ├── main.py                                # Point d'entrée FastAPI
+│   │   └── settings.py                        # Configuration file
+│   ├── logs/                                  # Log files (errors, debug, info)
+│   ├── tests/                                 # Test files (pytest)
+│   ├── main.py                                # FastAPI entry point
 │   └── routes.py
 
 # Frontend part
-├── frontend/                                  # Code frontend de l’application (Vue.js)
-│   ├── Dockerfile                             # Dockerfile pour construire l’image frontend
-│   ├── index.html                             # Page HTML principale
-│   ├── package.json                           # Dépendances et scripts frontend (npm)
-│   ├── public/                                # Fichiers publics (favicon, assets statiques)
-│   └── src/                                   # Code source Vue.js
-│       ├── App.vue                            # Composant racine Vue
-│       ├── assets/                            # Images, logos, styles globaux
+├── frontend/                                  # Frontend code of the application (Vue.js)
+│   ├── Dockerfile                             # Dockerfile to build the frontend image
+│   ├── index.html                             # Main HTML page
+│   ├── package.json                           # Frontend dependencies and scripts (npm)
+│   ├── public/                                # Public files (favicon, static assets)
+│   └── src/                                   # Vue.js source code
+│       ├── App.vue                            # Root Vue component
+│       ├── assets/                            # Images, logos, global styles
 │       │   └── logo.png
-│       ├── components/                        # Composants Vue réutilisables
+│       ├── components/                        # Reusable Vue components
 │       │   ├── Auth.vue
 │       │   └── Footer.vue
-│       ├── functions/                         # Fonctions utilitaires frontend (TS)
+│       ├── functions/                         # Frontend utility functions (TS)
 │       │   └── utils.ts
-│       ├── main.ts                            # Point d’entrée frontend Vue
-│       ├── pages/                             # Pages Vue (ex: Users.vue)
+│       ├── main.ts                            # Vue frontend entry point
+│       ├── pages/                             # Vue pages (e.g. Users.vue)
 │       │   └── Users.vue
-│       ├── router/                            # Gestion des routes Vue Router
+│       ├── router/                            # Vue Router route management
 │       │   └── index.ts
-│       ├── stores/                            # Stockage état global (Pinia)
+│       ├── stores/                            # Global state storage (Pinia)
 │       │   └── useAuthStore.ts
-│       └── styles/                            # Fichiers CSS / styles globaux
+│       └── styles/                            # CSS / global styles files
 │           └── styles.css
 
 # Others
-├── bonus_scripts/                             # Scripts utilitaires pour dev ou gestion
-│   ├── generate_secret_key.py                 # Script pour générer une clé secrète (ex: JWT)
-│   └── print_tree.py                          # Script pour afficher l’arborescence du projet
-├── docker-compose.yml                         # Orchestration Docker (backend + frontend)
-├── requirements.txt                           # Dépendances Python (dev local)
-├── run_auth.py                                # Script pour lancer la gestion des authentifications (dev local)
-├── run_backend.py                             # Script pour lancer le backend (dev local)
-└── run_frontend.py                            # Script pour lancer le frontend (dev local)
+├── bonus_scripts/                             # Utility scripts for dev or management
+│   ├── generate_secret_key.py                 # Script to generate a secret key (e.g. JWT)
+│   └── print_tree.py                          # Script to display the project tree structure
+├── docker-compose.yml                         # Docker orchestration (backend + frontend)
+├── conftest.py                                # Pytest configuration file for global tests
+├── requirements.txt                           # Python dependencies (local dev)
+├── run_auth.py                                # Script to run authentication management (local dev)
+├── run_backend.py                             # Script to run the backend (local dev)
+└── run_frontend.py                            # Script to run the frontend (local dev)
 ```
 
 ## Installation

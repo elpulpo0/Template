@@ -45,22 +45,24 @@ def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    app_name = form_data.scopes[0] if form_data.scopes else "default"
+    
     access_token_expires = timedelta(minutes=15)
     refresh_token_expires = timedelta(days=7)
 
     access_token = create_token(
-        data={"sub": user.email, "role": user.role.role, "type": "access"},
+        data={"sub": user.email, "role": user.role.role, "type": "access", "app": app_name},
         expires_delta=access_token_expires,
     )
 
     refresh_token = create_token(
-        data={"sub": user.email, "type": "refresh"},
+        data={"sub": user.email, "type": "refresh", "app": app_name},
         expires_delta=refresh_token_expires,
     )
 
     refresh_expiry = datetime.now(timezone.utc) + refresh_token_expires
     hashed_token = hash_token(refresh_token)
-    store_refresh_token(db, user.id, hashed_token, refresh_expiry)
+    store_refresh_token(db, user.id, hashed_token, refresh_expiry, app_name=app_name)
 
     return JSONResponse(
         {
@@ -144,6 +146,7 @@ def list_refresh_tokens(
             "created_at": token.created_at,
             "expires_at": token.expires_at,
             "revoked": token.revoked,
+            "app": token.app_name
         }
         for token in tokens
     ]

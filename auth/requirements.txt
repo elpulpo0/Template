@@ -9,4 +9,4 @@ PyYAML==6.0.2
 SQLAlchemy==2.0.41
 pytest==8.4.0
 pydantic[email]
-python-multipart
+python-multipart==0.0.20

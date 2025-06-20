@@ -19,12 +19,15 @@ ALGORITHM = "HS256"
 
 def create_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.now() + (expires_delta if expires_delta else timedelta(minutes=60))
+    expire = datetime.now() + (
+        expires_delta if expires_delta else timedelta(minutes=60)
+    )
 
     role = data.get("role")
     scopes_map = {"admin": ["admin"], "reader": ["reader"]}
     scopes = scopes_map.get(role, [])
 
+    # Déterminer le type du token
     token_type = data.get("type", "access")
     to_encode["token_type"] = token_type
 
@@ -68,15 +71,20 @@ def authenticate_user(db: Session, email: str, password: str):
     return user
 
 
-def store_refresh_token(db: Session, user_id: int, token: str, expires_at: datetime):
+def store_refresh_token(db: Session, user_id: int, token: str, expires_at: datetime, app_name: str = None):
     db.query(RefreshToken).filter(
-        RefreshToken.user_id == user_id, RefreshToken.revoked.is_(False)
+        RefreshToken.user_id == user_id,
+        RefreshToken.app_name == app_name,
+        RefreshToken.revoked.is_(False)
     ).update({RefreshToken.revoked: True}, synchronize_session=False)
 
+    # Ajoute le nouveau token
     refresh_token = RefreshToken(
         token=token,
         user_id=user_id,
         expires_at=expires_at,
+        app_name=app_name,
+        revoked=False
     )
     db.add(refresh_token)
     db.commit()
