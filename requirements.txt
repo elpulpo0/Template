@@ -12,4 +12,3 @@ pydantic[email]
 python-multipart==0.0.20
 ruff==0.12.0
 httpx==0.28.1
-pytest-pythonpath==0.7.4
