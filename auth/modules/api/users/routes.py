@@ -59,7 +59,9 @@ def get_all_users(
     current_user: dict = Depends(get_current_user), db: Session = Depends(get_users_db)
 ):
     if "admin" not in current_user.scopes:
-        raise HTTPException(status_code=403, detail="Access denied: administrators only.")
+        raise HTTPException(
+            status_code=403, detail="Access denied: administrators only."
+        )
 
     users = db.query(User).all()
 
@@ -143,7 +145,9 @@ def update_user_role(
     db: Session = Depends(get_users_db),
 ):
     if "admin" not in current_user.scopes:
-        raise HTTPException(status_code=403, detail="Access denied: administrators only.")
+        raise HTTPException(
+            status_code=403, detail="Access denied: administrators only."
+        )
 
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -199,7 +203,9 @@ def admin_update_user(
     db: Session = Depends(get_users_db),
 ):
     if "admin" not in current_user.scopes:
-        raise HTTPException(status_code=403, detail="Access denied: administrators only.")
+        raise HTTPException(
+            status_code=403, detail="Access denied: administrators only."
+        )
 
     user = db.query(User).filter(User.id == user_id).first()
     if not user:

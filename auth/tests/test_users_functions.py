@@ -1,10 +1,8 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from fastapi import HTTPException 
+from fastapi import HTTPException
 from fastapi.security import SecurityScopes
 from jose import JWTError
-from pydantic import ValidationError
-from modules.api.users.schemas import TokenData
 from modules.api.users.functions import get_current_user, get_user_by_email
 
 # Mocks génériques
@@ -16,8 +14,8 @@ fake_token_data = {
     "sub": fake_email,
     "exp": 1737057317,
     "role": "admin",
-    "scopes": ["reader", "admin"]
-    }
+    "scopes": ["reader", "admin"],
+}
 
 
 def test_get_user_by_email_found():
@@ -80,10 +78,9 @@ def test_get_current_user_forbidden_scope(mock_get_user, mock_decode):
         "sub": fake_email,
         "exp": 1737057317,
         "role": "admin",
-        "scopes": ["reader"]  # no 'admin' here
+        "scopes": ["reader"],  # no 'admin' here
     }
     scopes = SecurityScopes(scopes=["admin"])
     with pytest.raises(HTTPException) as exc:
         get_current_user(security_scopes=scopes, token=fake_token, db=fake_db)
     assert exc.value.status_code == 403
-

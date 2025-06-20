@@ -71,11 +71,13 @@ def authenticate_user(db: Session, email: str, password: str):
     return user
 
 
-def store_refresh_token(db: Session, user_id: int, token: str, expires_at: datetime, app_name: str = None):
+def store_refresh_token(
+    db: Session, user_id: int, token: str, expires_at: datetime, app_name: str = None
+):
     db.query(RefreshToken).filter(
         RefreshToken.user_id == user_id,
         RefreshToken.app_name == app_name,
-        RefreshToken.revoked.is_(False)
+        RefreshToken.revoked.is_(False),
     ).update({RefreshToken.revoked: True}, synchronize_session=False)
 
     # Ajoute le nouveau token
@@ -84,7 +86,7 @@ def store_refresh_token(db: Session, user_id: int, token: str, expires_at: datet
         user_id=user_id,
         expires_at=expires_at,
         app_name=app_name,
-        revoked=False
+        revoked=False,
     )
     db.add(refresh_token)
     db.commit()

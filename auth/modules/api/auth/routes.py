@@ -15,7 +15,11 @@ from modules.api.auth.functions import (
 )
 import os
 from jose import JWTError, jwt
-from modules.api.users.functions import get_user_by_email, oauth2_scheme, get_current_user
+from modules.api.users.functions import (
+    get_user_by_email,
+    oauth2_scheme,
+    get_current_user,
+)
 from modules.api.auth.functions import find_refresh_token
 from modules.api.auth.security import anonymize, hash_token
 from fastapi.responses import JSONResponse
@@ -46,12 +50,17 @@ def login_for_access_token(
         )
 
     app_name = form_data.scopes[0] if form_data.scopes else "default"
-    
+
     access_token_expires = timedelta(minutes=15)
     refresh_token_expires = timedelta(days=7)
 
     access_token = create_token(
-        data={"sub": user.email, "role": user.role.role, "type": "access", "app": app_name},
+        data={
+            "sub": user.email,
+            "role": user.role.role,
+            "type": "access",
+            "app": app_name,
+        },
         expires_delta=access_token_expires,
     )
 
@@ -146,7 +155,7 @@ def list_refresh_tokens(
             "created_at": token.created_at,
             "expires_at": token.expires_at,
             "revoked": token.revoked,
-            "app": token.app_name
+            "app": token.app_name,
         }
         for token in tokens
     ]

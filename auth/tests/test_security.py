@@ -1,8 +1,13 @@
 import re
 import hashlib
-import bcrypt
 import pytest
-from modules.api.auth.security import anonymize, hash_token, hash_password, verify_password
+from modules.api.auth.security import (
+    anonymize,
+    hash_token,
+    hash_password,
+    verify_password,
+)
+
 
 def test_anonymize():
     name = "John"

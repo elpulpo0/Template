@@ -15,6 +15,7 @@ from modules.api.auth.models import RefreshToken
 # -------------------------------
 fake_db = MagicMock()
 
+
 # -------------------------------
 # Test pour create_token
 # -------------------------------
@@ -39,7 +40,9 @@ def test_authenticate_user_success(mock_anonymize, mock_verify_password, mock_ge
 
     mock_anonymize.return_value = email
     mock_verify_password.return_value = True
-    mock_get_user.return_value = type("User", (), {"name": "Test", "password": "hashed_pwd"})()
+    mock_get_user.return_value = type(
+        "User", (), {"name": "Test", "password": "hashed_pwd"}
+    )()
 
     user = authenticate_user(fake_db, email, password)
 
@@ -65,7 +68,9 @@ def test_authenticate_user_not_found(mock_anonymize, mock_get_user):
 @patch("modules.api.auth.functions.get_user_by_email")
 @patch("modules.api.auth.functions.verify_password")
 @patch("modules.api.auth.functions.anonymize")
-def test_authenticate_user_invalid_password(mock_anonymize, mock_verify_password, mock_get_user):
+def test_authenticate_user_invalid_password(
+    mock_anonymize, mock_verify_password, mock_get_user
+):
     email = "test@example.com"
     password = "wrong-password"
 
@@ -111,7 +116,7 @@ def test_find_refresh_token_found():
         user_id=1,
         token=fake_token_value,
         revoked=False,
-        expires_at=datetime.utcnow() + timedelta(days=1)
+        expires_at=datetime.utcnow() + timedelta(days=1),
     )
 
     fake_db = MagicMock()

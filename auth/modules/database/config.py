@@ -9,4 +9,6 @@ USERS_DATABASE_PATH = DATABASE_DIR / "users.db"
 
 USERS_DATABASE_URL = f"sqlite:///{USERS_DATABASE_PATH}"
 
-INITIAL_USERS_CONFIG_PATH = BASE_DIR / "modules" / "api" / "users" / "initial_users.yaml"
+INITIAL_USERS_CONFIG_PATH = (
+    BASE_DIR / "modules" / "api" / "users" / "initial_users.yaml"
+)
