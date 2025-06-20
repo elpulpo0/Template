@@ -31,7 +31,8 @@ jobs:
 
       - name: Install Node.js dependencies
         run: |
-          npm ci || npm install
+          cd frontend
+          npm install
 
       - name: Lint Python code with Ruff
         run: |
