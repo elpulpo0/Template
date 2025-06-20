@@ -1,14 +1,26 @@
 import pluginVue from 'eslint-plugin-vue';
-import { configs as typescriptConfigs } from '@typescript-eslint/eslint-plugin';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+const { configs: typescriptConfigs } = tsPlugin;
 import parser from '@typescript-eslint/parser';
 import prettier from 'eslint-config-prettier';
+import vueParser from 'vue-eslint-parser';
 
 export default [
+    {
+        ignores: [
+            '**/*.json',
+            '**/*.html',
+            'package-lock.json',
+            'tsconfig.json',
+            'jsconfig.json',
+            'build-meta.json',
+        ],
+    },
     // JavaScript et TypeScript
     {
         files: ['**/*.{js,jsx,ts,tsx}'],
         languageOptions: {
-            parser, // Utilisation correcte du parser
+            parser,
             parserOptions: {
                 ecmaVersion: 'latest',
                 sourceType: 'module',
@@ -23,17 +35,22 @@ export default [
         },
     },
 
-    // Fichiers Vue
+    // Vue
     {
         files: ['**/*.vue'],
         languageOptions: {
-            parser,
+            parser: vueParser,
+            parserOptions: {
+                parser,
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+            },
         },
         plugins: {
             vue: pluginVue,
         },
         rules: {
-            ...pluginVue.configs['flat/recommended'].rules, // Inclut les règles par défaut
+            ...pluginVue.configs['flat/recommended'].rules,
             'vue/attribute-hyphenation': ['error', 'never'],
             'vue/attributes-order': [
                 'error',
@@ -55,9 +72,9 @@ export default [
                     alphabetical: false,
                 },
             ],
+            'vue/first-attribute-linebreak': 'off',
             'vue/component-name-in-template-casing': ['error', 'PascalCase'],
             'vue/html-closing-bracket-newline': ['error', { singleline: 'never', multiline: 'never' }],
-            'vue/first-attribute-linebreak': ['error', { singleline: 'ignore', multiline: 'below' }],
             'vue/max-attributes-per-line': [
                 'error',
                 {
@@ -80,9 +97,9 @@ export default [
         },
     },
 
-    // Intégration avec Prettier
+    // Prettier
     {
-        files: ['**/*.{js,ts,vue,json,scss,html}'], // Applique Prettier partout
+        files: ['**/*.{js,ts,vue,json,scss,html}'],
         rules: {
             ...prettier.rules,
         },

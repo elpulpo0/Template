@@ -22,7 +22,7 @@ onMounted(() => {
     <header class="header">
       <div class="left-section">
         <img src="./assets/logo.png" alt="Logo" class="logo" />
-        <ul class="nav-links" v-if="['admin', 'editor', 'reader'].includes(authStore.userRole)">
+        <ul v-if="['admin', 'editor', 'reader'].includes(authStore.userRole)" class="nav-links">
           <li><router-link to="/users" class="nav-link">Users</router-link></li>
           <li><router-link to="/api" class="nav-link">Api</router-link></li>
         </ul>

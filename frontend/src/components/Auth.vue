@@ -228,9 +228,9 @@ watch(() => authStore.token, async (newToken) => {
 
       <!-- Formulaire de connexion -->
       <form v-if="!isRegistering" @submit.prevent="login" :key="'login-form'">
-        <input class="input-auth" type="email" id="email" v-model="email" placeholder="Email" autocomplete="username" />
-        <input class="input-auth" type="password" id="password" v-model="password" placeholder="Password"
-          autocomplete="current-password" />
+        <input id="email" v-model="email" type="email" placeholder="Email" autocomplete="username" class="input-auth" />
+        <input id="password" v-model="password" type="password" placeholder="Password" autocomplete="current-password"
+          class="input-auth" />
         <button type="button" @click="login">Log in</button>
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         <p v-if="successMessage" class="success">{{ successMessage }}</p>
@@ -239,12 +239,12 @@ watch(() => authStore.token, async (newToken) => {
 
       <!-- Formulaire d'inscription -->
       <form v-else @submit.prevent="register" :key="'register-form'">
-        <input class="input-auth" type="email" v-model="email" placeholder="Email" autocomplete="username" />
-        <input class="input-auth" type="name" v-model="name" placeholder="Name" />
-        <input class="input-auth" type="password" v-model="password" placeholder="Password"
-          autocomplete="new-password" />
-        <input class="input-auth" type="password" v-model="confirmPassword" placeholder="Confirm password"
-          autocomplete="new-password" />
+        <input v-model="email" type="email" placeholder="Email" autocomplete="username" class="input-auth" />
+        <input v-model="name" type="name" placeholder="Name" class="input-auth" />
+        <input v-model="password" type="password" placeholder="Password" autocomplete="new-password"
+          class="input-auth" />
+        <input v-model="confirmPassword" type="password" placeholder="Confirm password" autocomplete="new-password"
+          class="input-auth" />
         <button type="submit">Create an account</button>
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         <p>Already have an account? <a href="#" @click="isRegistering = false; resetMessages()">Log in</a></p>
@@ -268,20 +268,20 @@ watch(() => authStore.token, async (newToken) => {
           <h2>Modifier mes informations</h2>
           <form class="form-grid">
             <label for="newName">Name</label>
-            <input class="input-auth" id="newName" type="text" v-model="newName" placeholder="Name"
-              autocomplete="name" />
+            <input id="newName" v-model="newName" type="text" placeholder="Name" autocomplete="name"
+              class="input-auth" />
 
             <label for="newEmail">Email</label>
-            <input class="input-auth" id="newEmail" type="email" v-model="newEmail" placeholder="Email"
-              autocomplete="email" />
+            <input id="newEmail" v-model="newEmail" type="email" placeholder="Email" autocomplete="email"
+              class="input-auth" />
 
             <label for="newPassword">Password</label>
-            <input class="input-auth" id="newPassword" type="password" v-model="newPassword" placeholder="Password"
-              autocomplete="new-password" />
+            <input id="newPassword" v-model="newPassword" type="password" placeholder="Password"
+              autocomplete="new-password" class="input-auth" />
 
             <label for="confirmPassword">Confirm password</label>
-            <input class="input-auth" id="confirmPassword" type="password" v-model="confirmPassword"
-              placeholder="mot de passe" autocomplete="new-password" />
+            <input id="confirmPassword" v-model="confirmPassword" type="password" placeholder="mot de passe"
+              autocomplete="new-password" class="input-auth" />
           </form>
 
           <button @click.prevent="updateProfile">Save changes</button>

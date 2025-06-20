@@ -194,9 +194,9 @@ watch(
             </td>
             <td v-if="['admin'].includes(authStore.userRole) && editingUserId == user.id">
               <form class="form-section">
-                <input class="form-input" v-model="editName" placeholder="Name" />
-                <input class="form-input" v-model="editEmail" placeholder="Email" />
-                <input class="form-input" v-model="editPassword" placeholder="Password" />
+                <input v-model="editName" placeholder="Name" class="form-input" />
+                <input v-model="editEmail" placeholder="Email" class="form-input" />
+                <input v-model="editPassword" placeholder="Password" class="form-input" />
                 <button v-if="user.role === 'reader'" @click="updateRole(user.id, 'editor')">Make Editor</button>
               </form>
               <button @click="submitEdit(user.id)">Save</button>

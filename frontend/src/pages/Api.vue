@@ -33,7 +33,7 @@ onMounted(() => {
   <div v-if="['admin', 'editor', 'reader'].includes(authStore.userRole)">
     <div class="module">
       <h2>🩺 Health Check</h2>
-      <button @click="healthCheck" :disabled="loading">
+      <button :disabled="loading" @click="healthCheck">
         {{ loading ? 'Checking...' : 'Check Again' }}
       </button>
       <p v-if="healthStatus">✅ Backend is up: {{ healthStatus }}</p>
