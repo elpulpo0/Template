@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 
 from modules.api.auth.functions import (
@@ -88,7 +88,7 @@ def test_authenticate_user_invalid_password(
 def test_store_refresh_token():
     fake_token_value = "some-refresh-token"
     fake_user_id = 1
-    fake_expires_at = datetime.utcnow() + timedelta(days=7)
+    fake_expires_at = datetime.now(timezone.utc) + timedelta(days=7)
 
     fake_db = MagicMock()
 
