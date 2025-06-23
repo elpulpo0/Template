@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 # Ajouter le dossier parent au path pour imports relatifs
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from auth.modules.api.main import app
+from modules.api.main import app
 from modules.database.session import UsersBase
 from modules.database.dependencies import get_users_db
 from modules.api.users.models import User, Role
