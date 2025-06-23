@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, constr
+from pydantic import BaseModel, EmailStr, constr, ConfigDict
 from typing import List, Optional
 
 
@@ -15,8 +15,7 @@ class UserResponse(BaseModel):
     is_active: bool
     role: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class RoleUpdate(BaseModel):
