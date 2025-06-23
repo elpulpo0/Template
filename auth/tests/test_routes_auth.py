@@ -2,6 +2,8 @@ import os
 import sys
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -10,12 +12,6 @@ from modules.database.session import UsersBase
 from modules.database.dependencies import get_users_db
 from modules.api.users.models import User, Role
 from modules.api.auth.security import hash_password, anonymize
-
-import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning, module="sqlalchemy")
-
-from sqlalchemy import create_engine # noqa: E402
-from sqlalchemy.orm import sessionmaker # noqa: E402
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(
