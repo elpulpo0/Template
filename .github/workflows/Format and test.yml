@@ -42,6 +42,10 @@ jobs:
           npx eslint . --ext .js,.vue
         working-directory: ./frontend
 
+      - name: Create default .env file
+        run: |
+          echo "SECRET_KEY=d8jRkXzKmJ-4nAdP6u9V6HbU0EZRz2VZXB1no4mYQfg" >> .env
+
       - name: Run tests
         run: |
           pytest
