@@ -116,7 +116,7 @@ def test_find_refresh_token_found():
         user_id=1,
         token=fake_token_value,
         revoked=False,
-        expires_at=datetime.utcnow() + timedelta(days=1),
+        expires_at=datetime.now(timezone.utc) + timedelta(days=1),
     )
 
     fake_db = MagicMock()

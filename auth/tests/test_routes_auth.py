@@ -14,6 +14,9 @@ from modules.database.dependencies import get_users_db
 from modules.api.users.models import User, Role
 from modules.api.auth.security import hash_password, anonymize
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="sqlalchemy")
+
 # Setup SQLite pour tests (fichier local test.db)
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(
