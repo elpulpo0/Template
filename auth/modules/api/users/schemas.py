@@ -34,3 +34,4 @@ class TokenData(BaseModel):
     exp: int
     role: str
     scopes: List[str]
+    id: Optional[int] = None

@@ -41,7 +41,7 @@ def test_authenticate_user_success(mock_anonymize, mock_verify_password, mock_ge
     mock_anonymize.return_value = email
     mock_verify_password.return_value = True
     mock_get_user.return_value = type(
-        "User", (), {"name": "Test", "password": "hashed_pwd"}
+        "User", (), {"name": "Test", "hashed_password": "hashed_pwd"}
     )()
 
     user = authenticate_user(fake_db, email, password)
@@ -76,7 +76,7 @@ def test_authenticate_user_invalid_password(
 
     mock_anonymize.return_value = email
     mock_verify_password.return_value = False
-    mock_get_user.return_value = type("User", (), {"password": "hashed_pwd"})()
+    mock_get_user.return_value = type("User", (), {"hashed_password": "hashed_pwd"})()
 
     result = authenticate_user(fake_db, email, password)
     assert result is False

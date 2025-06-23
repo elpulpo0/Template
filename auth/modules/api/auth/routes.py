@@ -21,7 +21,7 @@ from modules.api.users.functions import (
     get_current_user,
 )
 from modules.api.auth.functions import find_refresh_token
-from modules.api.auth.security import anonymize, hash_token
+from modules.api.auth.security import hash_token
 from fastapi.responses import JSONResponse
 from uuid import uuid4
 from typing import List
@@ -109,8 +109,7 @@ def refresh_token(
 
     refresh_token_db.revoked = True
 
-    hashed_email = anonymize(email)
-    user = get_user_by_email(hashed_email, db)
+    user = get_user_by_email(email, db)
     if not user:
         raise HTTPException(status_code=404, detail="User not found.")
 

@@ -74,7 +74,7 @@ template/
 ├── bonus_scripts/                             # Utility scripts for dev or management
 │   ├── generate_secret_key.py                 # Script to generate a secret key (e.g. JWT)
 │   └── print_tree.py                          # Script to display the project tree structure
-├── docker-compose.yml                         # Docker orchestration (backend + frontend)
+├── docker-compose.yml                         # Docker orchestration
 ├── conftest.py                                # Pytest configuration file for global tests
 ├── requirements.txt                           # Python dependencies (local dev)
 ├── run_auth.py                                # Script to run authentication management (local dev)

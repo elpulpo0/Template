@@ -27,7 +27,6 @@ def create_token(data: dict, expires_delta: timedelta = None):
     scopes_map = {"admin": ["admin"], "reader": ["reader"]}
     scopes = scopes_map.get(role, [])
 
-    # Déterminer le type du token
     token_type = data.get("type", "access")
     to_encode["token_type"] = token_type
 
@@ -63,7 +62,7 @@ def authenticate_user(db: Session, email: str, password: str):
         logger.info("User not found.")
         return False
 
-    if not verify_password(password, user.password):
+    if not verify_password(password, user.hashed_password):
         logger.info("Invalid password.")
         return False
 

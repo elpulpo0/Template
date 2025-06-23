@@ -40,7 +40,14 @@ def read_users_me(
     summary="Retrieve a user by ID",
     description="Returns the information of a specific user based on their ID.",
 )
-def get_user(user_id: int, db: Session = Depends(get_users_db)):
+def get_user(
+    user_id: int,
+    db: Session = Depends(get_users_db),
+    current_user: User = Depends(get_current_user),
+):
+    if current_user.id != user_id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Access forbidden")
+
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -119,7 +126,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_users_db)):
     new_user = User(
         email=anonymized_email,
         name=user_data.name,
-        password=hash_password(user_data.password),
+        hashed_password =hash_password(user_data.password),
         role_id=role_obj.id,
         is_active=True,
     )
@@ -181,7 +188,7 @@ def update_current_user(
         user.email = anonymize(update_data.email)
 
     if update_data.password:
-        user.password = hash_password(update_data.password)
+        user.hashed_password = hash_password(update_data.password)
 
     db.commit()
     db.refresh(user)
@@ -218,7 +225,7 @@ def admin_update_user(
         user.email = anonymize(update_data.email)
 
     if update_data.password:
-        user.password = hash_password(update_data.password)
+        user.hashed_password = hash_password(update_data.password)
 
     db.commit()
     db.refresh(user)

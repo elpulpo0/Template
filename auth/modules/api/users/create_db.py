@@ -41,6 +41,7 @@ def load_initial_users_config():
 def create_roles_and_first_users():
     """
     Create roles and first users as defined in the initial configuration file.
+    Raises an exception if something goes wrong during creation.
     """
     config = load_initial_users_config()
     db: Session = UsersSessionLocal()
@@ -64,7 +65,7 @@ def create_roles_and_first_users():
             user = User(
                 email=anonymize(user_cfg["email"]),
                 name=user_cfg["name"],
-                password=hash_password(user_cfg["password"]),
+                hashed_password=hash_password(user_cfg["password"]),
                 role_id=role_id,
                 is_active=True,
             )
@@ -76,5 +77,6 @@ def create_roles_and_first_users():
     except Exception as e:
         db.rollback()
         logger.error(f"Error while creating initial users: {e}")
+        raise
     finally:
         db.close()
