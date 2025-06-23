@@ -1,4 +1,3 @@
-# flake8: noqa: E402
 from fastapi.testclient import TestClient
 import os
 import sys

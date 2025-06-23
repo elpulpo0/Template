@@ -2,10 +2,7 @@ import os
 import sys
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
-# Ajouter le dossier parent au path pour imports relatifs
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from modules.api.main import app
@@ -17,7 +14,9 @@ from modules.api.auth.security import hash_password, anonymize
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning, module="sqlalchemy")
 
-# Setup SQLite pour tests (fichier local test.db)
+from sqlalchemy import create_engine # noqa: E402
+from sqlalchemy.orm import sessionmaker # noqa: E402
+
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
@@ -34,7 +33,6 @@ def test_routes_presence(client):
 
 @pytest.fixture(scope="function")
 def db():
-    # Reset base avant chaque test (drop/create)
     UsersBase.metadata.drop_all(bind=engine)
     UsersBase.metadata.create_all(bind=engine)
     session = TestingSessionLocal()
@@ -46,7 +44,6 @@ def db():
 
 @pytest.fixture(scope="function")
 def client(db):
-    # Override la dépendance get_users_db avec session de test
     def override_get_users_db():
         yield db
 
@@ -75,7 +72,7 @@ def create_test_user(db, create_roles):
     user = User(
         email=anonymize("test@example.com"),
         name="Test User",
-        hashed_password=hash_password("password123"),  # Utiliser password !
+        hashed_password=hash_password("password123"),
         role_id=role_user.id,
     )
     db.add(user)
@@ -90,7 +87,7 @@ def create_admin_user(db, create_roles):
     admin = User(
         email=anonymize("admin@example.com"),
         name="Admin User",
-        hashed_password=hash_password("adminpass"),  # Utiliser password !
+        hashed_password=hash_password("adminpass"),
         role_id=role_admin.id,
     )
     db.add(admin)
@@ -102,12 +99,11 @@ def create_admin_user(db, create_roles):
 def login(client, email, password):
     response = client.post(
         "/auth/login",
-        data={"username": email, "password": password},  # form-data requis par OAuth2PasswordRequestForm
+        data={"username": email, "password": password},
     )
     assert response.status_code == 200
     json_data = response.json()
     assert "access_token" in json_data
-    # refresh_token peut être optionnel
     return json_data["access_token"], json_data.get("refresh_token")
 
 

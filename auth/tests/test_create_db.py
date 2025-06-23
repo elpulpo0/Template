@@ -86,9 +86,7 @@ def test_create_roles_and_first_users_success(mock_hash_password, mock_anonymize
     mock_db = MagicMock()
     mock_users_session_local.return_value = mock_db
 
-    # Simule l'absence de rôle existant
     mock_db.query.return_value.filter_by.return_value.first.return_value = None
-    # Simule les rôles existants dans la DB
     mock_db.query.return_value.all.return_value = [
         users_models.Role(role="admin", id=1),
         users_models.Role(role="user", id=2),

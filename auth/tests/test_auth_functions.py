@@ -17,7 +17,7 @@ fake_db = MagicMock()
 
 
 # -------------------------------
-# Test pour create_token
+# create_token
 # -------------------------------
 @patch("modules.api.auth.functions.jwt.encode")
 def test_create_token_with_access_type(mock_encode):
@@ -29,7 +29,7 @@ def test_create_token_with_access_type(mock_encode):
 
 
 # -------------------------------
-# Tests pour authenticate_user
+# authenticate_user
 # -------------------------------
 @patch("modules.api.auth.functions.get_user_by_email")
 @patch("modules.api.auth.functions.verify_password")
@@ -83,7 +83,7 @@ def test_authenticate_user_invalid_password(
 
 
 # -------------------------------
-# Test pour store_refresh_token
+# store_refresh_token
 # -------------------------------
 def test_store_refresh_token():
     fake_token_value = "some-refresh-token"
@@ -106,12 +106,11 @@ def test_store_refresh_token():
 
 
 # -------------------------------
-# Test pour find_refresh_token
+# find_refresh_token
 # -------------------------------
 def test_find_refresh_token_found():
     fake_token_value = "existing-token"
 
-    # Créer un faux RefreshToken réaliste
     fake_token = RefreshToken(
         user_id=1,
         token=fake_token_value,
@@ -135,7 +134,7 @@ def test_find_refresh_token_not_found():
 
 
 # -------------------------------
-# Test pour verify_token
+# verify_token
 # -------------------------------
 @patch("modules.api.auth.functions.hash_token")
 def test_verify_token_match(mock_hash_token):

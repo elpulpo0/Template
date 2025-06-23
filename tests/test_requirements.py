@@ -3,7 +3,6 @@ import subprocess
 import re
 
 def test_requirements_completeness():
-    # Génère un fichier temporaire avec les dépendances détectées par pipreqs
     temp_file = "temp_requirements.txt"
     subprocess.run([
         "pipreqs", ".", "--force", "--savepath", temp_file, "--ignore", "tests,.venv"
@@ -21,7 +20,6 @@ def test_requirements_completeness():
         detected = load_requirements(temp_file)
         declared = load_requirements("requirements.txt")
 
-        # Modules à ignorer (détectés mais non nécessaires dans requirements.txt)
         ignored = {"python_bcrypt", "setuptools"}
 
         missing = detected - declared - ignored

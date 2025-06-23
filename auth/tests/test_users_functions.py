@@ -5,7 +5,6 @@ from fastapi.security import SecurityScopes
 from jose import JWTError
 from modules.api.users.functions import get_current_user, get_user_by_email
 
-# Mocks génériques
 fake_email = "anonymized@email.com"
 fake_token = "fake.jwt.token"
 fake_db = MagicMock()
@@ -53,7 +52,7 @@ def test_get_current_user_invalid_token(mock_decode):
 
 @patch("modules.api.users.functions.jwt.decode")
 def test_get_current_user_invalid_payload(mock_decode):
-    mock_decode.return_value = {"invalid": "payload"}  # Missing 'sub' field
+    mock_decode.return_value = {"invalid": "payload"}
 
     scopes = SecurityScopes(scopes=["reader"])
     with pytest.raises(HTTPException) as exc:
@@ -73,12 +72,11 @@ def test_get_current_user_user_not_found(mock_get_user, mock_decode):
 @patch("modules.api.users.functions.jwt.decode")
 @patch("modules.api.users.functions.get_user_by_email", return_value=fake_user)
 def test_get_current_user_forbidden_scope(mock_get_user, mock_decode):
-    # simulate token with no matching scopes
     mock_decode.return_value = {
         "sub": fake_email,
         "exp": 1737057317,
         "role": "admin",
-        "scopes": ["reader"],  # no 'admin' here
+        "scopes": ["reader"],
     }
     scopes = SecurityScopes(scopes=["admin"])
     with pytest.raises(HTTPException) as exc:
