@@ -9,8 +9,6 @@ services:
     volumes:
       - auth-database:/app/database
       - auth-logs:/app/logs
-    environment:
-      - FRONTEND_URL="http://frontend:${PORT_FRONT}"
     env_file:
       - .env
     command: ["uvicorn", "modules.api.main:app", "--host", "0.0.0.0", "--port", "${PORT_AUTH}", "--log-level", "info"]
