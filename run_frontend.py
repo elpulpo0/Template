@@ -22,12 +22,12 @@ with open(frontend_env_path, "w") as f:
     f.write(f"VITE_APP_NAME={APP_NAME}\n")
 
 logger.info(
-    f"✅ File '{frontend_env_path}' successfully generated with values: "
-    f"VITE_PORT={PORT_FRONT} "
-    f"VITE_PORT_BACK={PORT_BACK} "
-    f"VITE_PORT_AUTH={PORT_AUTH} "
-    f"VITE_GITHUB_URL={GITHUB_URL} "
-    f"VITE_APP_NAME={APP_NAME}"
+    f"✅ File '{frontend_env_path}' successfully generated with values:\n"
+    f"                                           VITE_PORT={PORT_FRONT}\n"
+    f"                                           VITE_PORT_BACK={PORT_BACK}\n"
+    f"                                           VITE_PORT_AUTH={PORT_AUTH}\n"
+    f"                                           VITE_GITHUB_URL={GITHUB_URL}\n"
+    f"                                           VITE_APP_NAME={APP_NAME}"
 )
 
 try:

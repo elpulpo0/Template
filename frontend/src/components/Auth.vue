@@ -265,7 +265,7 @@ watch(() => authStore.token, async (newToken) => {
         </div>
 
         <div>
-          <h2>Modifier mes informations</h2>
+          <h2>Edit my information</h2>
           <form class="form-grid">
             <label for="newName">Name</label>
             <input id="newName" v-model="newName" type="text" placeholder="Name" autocomplete="name"
