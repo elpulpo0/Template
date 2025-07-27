@@ -90,6 +90,12 @@ template/
 git clone https://github.com/Microphyt/Template.git
 ```
 
+**Generate a new secret key**
+
+```sh
+python bonus_scripts/generate_secret_key.py
+```
+
 **Create and edit your environnement file**
 
 ```sh
@@ -97,7 +103,7 @@ cp .env.example .env
 ```
 
 ```
-SECRET_KEY=     # Generate a new secret key with this script : bonus_scripts\generate_secret_key.py
+SECRET_KEY=     # Use the key generated
 GITHUB_URL=     # The address of your git repository
 APP_NAME=       # The name of your application
 AUTH_BACK=      # The port you want to use for the authentification part of your application
@@ -172,4 +178,3 @@ cd ../ && python run_frontend.py
 ```sh
 python run_auth.py
 ```
-
