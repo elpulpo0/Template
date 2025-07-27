@@ -117,6 +117,11 @@ PORT_FRONT=     # The port you want to use for the frontend of your application
 cp auth/modules/api/users/initial_users.yaml.example auth/modules/api/users/initial_users.yaml
 ```
 
+**Generate passwords for the initials users**
+```sh
+python bonus_scripts/generate_password.py
+```
+
 ## Launch for production
 
 ```sh
@@ -178,3 +183,4 @@ cd ../ && python run_frontend.py
 ```sh
 python run_auth.py
 ```
+
