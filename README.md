@@ -114,7 +114,7 @@ PORT_FRONT=     # The port you want to use for the frontend of your application
 **Create and edit your initial users config file**
 
 ```sh
-cp backend/modules/api/users/initial_users.yaml.example backend/modules/api/users/initial_users.yaml
+cp auth/modules/api/users/initial_users.yaml.example auth/modules/api/users/initial_users.yaml
 ```
 
 ## Launch for production
